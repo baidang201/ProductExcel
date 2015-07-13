@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Signalway.CommThemes.Converters">
+
+    <converters:BooleanToFontWeightConverter x:Key="BooleanToFontWeightConverter" />
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <converters:ToUpperConverter x:Key="ToUpperConverter" />
+    <converters:ToLowerConverter x:Key="ToLowerConverter" />
+    <converters:ItemWidthFitConverter x:Key="ItemWidthFitConverter" />
+    <converters:MaxValueCompareConverter x:Key="MaxValueCompareConverter" />
+    <converters:ItemHeightFitConverter x:Key="ItemHeightFitConverter" />
+    <converters:InvertBoolConvert x:Key="InvertBoolConvert" />
+    <converters:BoolToStrConvert x:Key="BoolToStrConvert" />
+    <converters:RGBToBrushConvert x:Key="RGBToBrushConvert" />
+    <converters:FunctionToBrushConvert x:Key="FunctionToBrushConvert" />
+</ResourceDictionary>

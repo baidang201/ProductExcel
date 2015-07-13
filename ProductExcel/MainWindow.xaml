@@ -1,36 +1,100 @@
 ﻿<Window x:Class="ProductExcel.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="1024" Width="768">
+        Loaded="Window_Loaded"
+        Unloaded="Window_Unloaded"
+        Title="信用卡管理工具" Height="768" Width="1024">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="800"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="1" Grid.Column="1" x:Name="btnProductThree" Content="生成3天" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,3" Width="150" Height="50" Click="btnProductThree_Click"></Button>
-        <Button Grid.Row="1" Grid.Column="2" x:Name="btnProductSix" Content="生成6天" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,3" Width="150" Height="50" Click="btnProductSix_Click"></Button>
-        <Button Grid.Row="1" Grid.Column="3" x:Name="btnAddARow" HorizontalAlignment="Center" VerticalAlignment="Center" Content="添加一行数据"     Margin="6,3"  Width="150"  Height="50" Click="btnAddARow_Click"/>
-        
-        <DataGrid x:Name="dataGridExcel" Grid.Row="2"  Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24"  Height="800" Width="750" >
+        <DataGrid x:Name="dataGridExcel" Grid.Row="2"  Grid.Column="0" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="700" SelectionChanged="dataGridExcel_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="140" Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
-                <DataGridTextColumn Width="140" Binding="{Binding Path=PayExt,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="手续费" />
-                <DataGridTextColumn Width="180" Binding="{Binding Path=BillDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="账单日" />
+                <DataGridTextColumn Width="100" Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
+                <DataGridTextColumn Width="100" Binding="{Binding Path=BillDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="账单日" />
                 <DataGridTextColumn Width="100" Binding="{Binding Path=PayDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="还款日" />
                 <DataGridTextColumn Width="100" Binding="{Binding Path=PayLimit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="额度" />
+                <DataGridTextColumn Width="100" Binding="{Binding Path=CostBase,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="成本" />
+                <DataGridTextColumn Width="100" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款" />
             </DataGrid.Columns>
         </DataGrid>
 
+        <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.Column="1">
+            <TabItem x:Name="PaySetting" Header="参数设置" Height="23" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="15" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock  x:Name="PayDayCount" Grid.Row="0" Grid.Column="0" Margin="6,3" Text="还款天数:" HorizontalAlignment="Right" ></TextBlock>
+                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3"  Grid.Column="1"></ComboBox>
 
+                    <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}"></TextBlock>
+                    <TextBox x:Name="tbCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" Text="0.5" TextChanged="tbCostBase_TextChanged" ></TextBox>
+                    <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,3"></CheckBox>
 
+                    
+                    <TextBlock  x:Name="PayMode" Grid.Row="1" Grid.Column="0" Margin="6,3"  Text="还款模式:" HorizontalAlignment="Right" ></TextBlock>
+                    <ComboBox x:Name="comboPayMode" Grid.Row="1" Grid.Column="1" Margin="6,3" ></ComboBox>
 
+                    
+                    <TextBlock  x:Name="CostExtForSafe" Grid.Row="1" Grid.Column="3"  Margin="6,3" Text="多还款:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}"></TextBlock>
+                    <TextBox x:Name="tbCostExtForSafe" Grid.Row="1" Grid.Column="4" Margin="6,3" Text="2"  IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" TextChanged="tbCostExtForSafe_TextChanged"></TextBox>
+                    <TextBlock  Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Text="%"></TextBlock>
+                    <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3"></CheckBox>
+                    
+                    <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" ></Button>
+                </Grid>
+
+            </TabItem>
+
+            <TabItem x:Name="CompanySetting" Header="商户设置" Height="23" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="格式说明:" Margin="6,3" VerticalAlignment="Center" HorizontalAlignment="Right"></TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="商户名-法人" Margin="6,3"  VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+                    <Button Grid.Row="0"  Grid.Column="2"  Content="保存" Margin="6,3" ></Button>
+                    <DataGrid x:Name="dataCompany" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24"  >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*" Binding="{Binding Path=LiveliHood,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="民生"   />
+                            <DataGridTextColumn Width="*" Binding="{Binding Path=Normal,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="一般" />
+                            <DataGridTextColumn Width="*" Binding="{Binding Path=HightConsumption,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="高消费" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
+
 </Window>

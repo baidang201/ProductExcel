@@ -3,6 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CommThemes;component/Assets/SignalwayUI.xaml" />
+                <!--<ResourceDictionary Source="/commthemes;component/assets/signalwayui.dark.xaml" />-->
+                <ResourceDictionary Source="/CommThemes;component/Assets/SignalwayUI.Light.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!--分栏背景色#FF3E3E42 #FF696969 #FF007ACC -->
+            <Color x:Key="ClassBarColor">#FF3C5069</Color>
+            <SolidColorBrush x:Key="ClassBarBrush" Color="{DynamicResource ClassBarColor}" />
+            <!--工作区背景色#FF595959 #FFABABAB-->
+            <Color x:Key="WorkAreaColor">#FFEFEFF2</Color>
+            <SolidColorBrush x:Key="WorkAreaBrush" Color="{DynamicResource WorkAreaColor}" />
+            <!--状态栏背景色#FF888888 #FF505050-->
+            <Color x:Key="StatusBarColor">#FF34445C</Color>
+            <SolidColorBrush x:Key="StatusBarBrush" Color="{DynamicResource StatusBarColor}" />
+            <Color x:Key="MenuBarColor">#FF959B99</Color>
+            <SolidColorBrush x:Key="MenuBarBrush" Color="{DynamicResource MenuBarColor}" />
+            <!--标签文字-->
+            <Color x:Key="TextBlockColor">#FF000000</Color>
+            <SolidColorBrush x:Key="TextBlockBrush" Color="{DynamicResource TextBlockColor}" />
+            <!--工具条文字-->
+            <Color x:Key="ToolBarTextColor">#FFFFFFFF</Color>
+            <SolidColorBrush x:Key="ToolBarTextBrush" Color="{DynamicResource ToolBarTextColor}" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
