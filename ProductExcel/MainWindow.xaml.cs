@@ -19,15 +19,23 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Signalway.CommThemes;
 
+using NPOI.HSSF.UserModel;
+using NPOI.HPSF;
+using NPOI.POIFS.FileSystem;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+
+using System.IO;
+
 namespace ProductExcel
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window
-    {        
+    {
         static private string strFullPath = "";
-        static private int MaxLine = 100 - 3 + 1;
+        static private int MaxLine = 100;
         static private List<PayInfo> listPayInfo = new List<PayInfo>();
         static private List<CompanyInfo> listCompanyInfo = new List<CompanyInfo>();
 
@@ -128,7 +136,7 @@ namespace ProductExcel
                 //tbFullPath.Text = strFullPath;
             }
 
-        }       
+        }
 
         private void btnAddARow_Click(object sender, RoutedEventArgs e)
         {
@@ -180,8 +188,18 @@ namespace ProductExcel
             }
         }
 
+        private bool CheckPayInfoOK()
+        {
+            return true;
+        }
+
         private void btOutPutExcel_Click(object sender, RoutedEventArgs e)
         {
+            if (false == CheckPayInfoOK())
+            {
+                return;
+            }
+
             SaveFileDialog sd = new SaveFileDialog();
             sd.Filter = "Excel文档|*.xls";
             sd.Title = "导出excel";
@@ -191,176 +209,45 @@ namespace ProductExcel
             {
                 string fullName = sd.FileName;
                 //string fileName = sd.FileName.Substring(0, sd.FileName.Length - ".xls".Length);
-            }
-        }        
-    }
+                string excelTemp = @"temp.ini";
 
-    public class PayInfo : INotifyPropertyChanged
-    {
-        //名字
-        protected string m_Name = "";
-        public string Name
-        {
-            get { return this.m_Name; }
-            set
-            {
-                this.m_Name = value;
-                NotifyPropertyChanged("Name");
-            }
-        }
+                Helper.CopyFileTo(excelTemp, fullName);
 
-        //手续费
-        protected double m_PayExt = 0;
-        public double PayExt
-        {
-            get { return this.m_PayExt; }
-            set
-            {
-                this.m_PayExt = value;
-                NotifyPropertyChanged("PayExt");
-            }
-        }
+                if (System.IO.File.Exists(fullName) == false)//该批任务中，文件已解压，则不需要解密
+                {
+                    return;
+                }
 
-        //账单日
-        protected int m_BillDay = 1;
-        public int BillDay
-        {
-            get { return this.m_BillDay; }
-            set
-            {
-                this.m_BillDay = value;
-                NotifyPropertyChanged("BillDay");
-            }
-        }
+                FileStream file = File.OpenRead(fullName);
+                IWorkbook workbook = new HSSFWorkbook(file);
 
-        //还款日
-        protected int m_PayDay = 1;
-        public int PayDay
-        {
-            get { return this.m_PayDay; }
-            set
-            {
-                this.m_PayDay = value;
-                NotifyPropertyChanged("PayDay");
-            }
-        }
+                int PayDayCount = Convert.ToInt32(comboPayDayCount.SelectedValue);
+                for (int i = 1; i <= PayDayCount; i++)//遍历页数
+                {
+                    ISheet sheet = workbook.GetSheet(i.ToString());
 
-        //额度
-        protected double m_PayLimit = 0;
-        public double PayLimit
-        {
-            get { return this.m_PayLimit; }
-            set
-            {
-                this.m_PayLimit = value;
-                NotifyPropertyChanged("PayLimit");
-            }
-        }
+                    int beginRow = 4;
+                    int beginCol = 0;
+                    int row = beginRow;
+                    int col = beginCol;
 
-        //成本
-        protected double m_CostBase = 0;
-        public double CostBase
-        {
-            get { return this.m_CostBase; }
-            set
-            {
-                this.m_CostBase = value;
-                NotifyPropertyChanged("CostBase");
-            }
-        }
+                    foreach (PayInfo payInfo in listPayInfo)
+                    {
+                        sheet.GetRow(row).GetCell(col).SetCellValue(payInfo.Name);
+                        sheet.GetRow(row).GetCell(col + 1).SetCellValue(payInfo.BillDay);
+                        sheet.GetRow(row).GetCell(col + 2).SetCellValue(payInfo.PayDay);
+                        sheet.GetRow(row).GetCell(col + 3).SetCellValue(payInfo.PayLimit);
+                        row++;
+                    }
 
-        //多还款
-        protected double m_CostExtForSafe = 0;
-        public double CostExtForSafe
-        {
-            get { return this.m_CostExtForSafe; }
-            set
-            {
-                this.m_CostExtForSafe = value;
-                NotifyPropertyChanged("CostExtForSafe");
-            }
-        }
-
-        public PayInfo(string Name, double PayExt, int BillDay, int PayDay, double PayLimit, double CostBase, double CostExtForSafe)
-        {
-            this.Name = Name;
-            this.PayExt = PayExt;
-            this.BillDay = BillDay;
-            this.PayDay = PayDay;
-            this.PayLimit = PayLimit;
-            this.CostBase = CostBase;
-            this.CostExtForSafe = CostExtForSafe;
-        }
-
-        public PayInfo()
-        {
-            this.Name = "";
-            this.PayExt = 0.0;
-            this.BillDay = 1;
-            this.PayDay = 1;
-            this.PayLimit = 0;
-            this.CostBase = 0.6;
-            this.CostExtForSafe = 2;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-    }
-
-
-    public class CompanyInfo : INotifyPropertyChanged
-    {
-        //民生
-        protected string m_LiveliHood = "";
-        public string LiveliHood
-        {
-            get { return this.m_LiveliHood; }
-            set
-            {
-                this.m_LiveliHood = value;
-                NotifyPropertyChanged("LiveliHood");
-            }
-        }
-
-        //一般
-        protected string m_Normal = "";
-        public string Normal
-        {
-            get { return this.m_Normal; }
-            set
-            {
-                this.m_Normal = value;
-                NotifyPropertyChanged("Normal");
-            }
-        }
-
-        //高消费
-        protected string m_HightConsumption = "";
-        public string HightConsumption
-        {
-            get { return this.m_HightConsumption; }
-            set
-            {
-                this.m_HightConsumption = value;
-                NotifyPropertyChanged("HightConsumption");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
+                }
+                using (FileStream fs = File.OpenWrite(fullName))
+                {
+                    workbook.Write(fs);                    
+                } 
             }
         }
     }
 }
+
+

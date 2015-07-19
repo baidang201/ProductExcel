@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"></ColumnDefinition>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <DataGrid x:Name="dataGridExcel" Grid.Row="2"  Grid.Column="0" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="700" SelectionChanged="dataGridExcel_SelectionChanged">
@@ -22,7 +22,7 @@
                 <DataGridTextColumn Width="100" Binding="{Binding Path=PayDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="还款日" />
                 <DataGridTextColumn Width="100" Binding="{Binding Path=PayLimit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="额度" />
                 <DataGridTextColumn Width="100" Binding="{Binding Path=CostBase,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="成本" />
-                <DataGridTextColumn Width="100" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款" />
+                <DataGridTextColumn Width="100" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -46,25 +46,26 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    
+
                     <TextBlock  x:Name="PayDayCount" Grid.Row="0" Grid.Column="0" Margin="6,3" Text="还款天数:" HorizontalAlignment="Right" ></TextBlock>
-                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3"  Grid.Column="1"></ComboBox>
+                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3,6,0"  Grid.Column="1" Height="24" VerticalAlignment="Top"></ComboBox>
 
                     <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}"></TextBlock>
                     <TextBox x:Name="tbCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" Text="0.5" TextChanged="tbCostBase_TextChanged" ></TextBox>
                     <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,3"></CheckBox>
 
-                    
+
                     <TextBlock  x:Name="PayMode" Grid.Row="1" Grid.Column="0" Margin="6,3"  Text="还款模式:" HorizontalAlignment="Right" ></TextBlock>
                     <ComboBox x:Name="comboPayMode" Grid.Row="1" Grid.Column="1" Margin="6,3" ></ComboBox>
 
-                    
-                    <TextBlock  x:Name="CostExtForSafe" Grid.Row="1" Grid.Column="3"  Margin="6,3" Text="多还款:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}"></TextBlock>
-                    <TextBox x:Name="tbCostExtForSafe" Grid.Row="1" Grid.Column="4" Margin="6,3" Text="2"  IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" TextChanged="tbCostExtForSafe_TextChanged"></TextBox>
-                    <TextBlock  Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Text="%"></TextBlock>
-                    <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3"></CheckBox>
-                    
+
+                    <TextBlock  x:Name="CostExtForSafe" Grid.Row="1" Grid.Column="3"  Margin="6,3" Text="多还款:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" Visibility="Hidden"></TextBlock>
+                    <TextBox x:Name="tbCostExtForSafe" Grid.Row="1" Grid.Column="4" Margin="6,3" Text="2"  IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" TextChanged="tbCostExtForSafe_TextChanged" Visibility="Hidden"></TextBox>
+                    <TextBlock  Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Text="%" Visibility="Hidden"></TextBlock>
+                    <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3" Visibility="Hidden"></CheckBox>
+
                     <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" ></Button>
+                    <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" ></TextBlock>
                 </Grid>
 
             </TabItem>
