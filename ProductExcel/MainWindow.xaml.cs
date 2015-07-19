@@ -26,6 +26,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 using System.IO;
+using UtilityTool;
 
 namespace ProductExcel
 {
@@ -34,6 +35,12 @@ namespace ProductExcel
     /// </summary>
     public partial class MainWindow : Window
     {
+        string EORLog = @"EORLog.txt";
+        string iniCompanyFileName = @"Company.ini";
+        string iniPayFileName = @"PayFile.ini";
+        int companyInfoNum = 3;
+        int payInfoNum = 6;
+
         static private string strFullPath = "";
         static private int MaxLine = 100;
         static private List<PayInfo> listPayInfo = new List<PayInfo>();
@@ -48,18 +55,17 @@ namespace ProductExcel
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            dataGridExcel.LoadingRow += new EventHandler<DataGridRowEventArgs>(dataGridExcel_LoadingRow);
-            dataCompany.LoadingRow += new EventHandler<DataGridRowEventArgs>(dataGridExcel_LoadingRow);
+            dataGridPayInfo.LoadingRow += new EventHandler<DataGridRowEventArgs>(dataGridPayInfo_LoadingRow);
+            dataGridCompanyInfo.LoadingRow += new EventHandler<DataGridRowEventArgs>(dataGridPayInfo_LoadingRow);
 
-            dataGridExcel.UnloadingRow += new EventHandler<DataGridRowEventArgs>(dataGridExcel_UnloadingRow);
-            dataCompany.UnloadingRow += new EventHandler<DataGridRowEventArgs>(dataCompany_UnloadingRow);
-
-            listPayInfo.Add(new PayInfo());
-            listCompanyInfo.Add(new CompanyInfo());
-
-            dataGridExcel.ItemsSource = listPayInfo;
-            dataCompany.ItemsSource = listCompanyInfo;
+            dataGridPayInfo.UnloadingRow += new EventHandler<DataGridRowEventArgs>(dataGridPayInfo_UnloadingRow);
+            dataGridCompanyInfo.UnloadingRow += new EventHandler<DataGridRowEventArgs>(dataGridCompany_UnloadingRow);
+            
+            initINI();
             initGUI();
+
+            dataGridPayInfo.ItemsSource = listPayInfo;
+            dataGridCompanyInfo.ItemsSource = listCompanyInfo;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -76,86 +82,139 @@ namespace ProductExcel
             comboPayMode.SelectedIndex = 0;
         }
 
-        private void dataGridExcel_LoadingRow(object sender, DataGridRowEventArgs e)
+        void initINI()
+        {
+
+            #region 公司文件存在
+            if (System.IO.File.Exists(iniCompanyFileName) == true) 
+            {
+                using (StreamReader SR = new StreamReader(iniCompanyFileName))
+                {
+                    string line = null;                    
+                    while ((line = SR.ReadLine()) != null)
+                    {
+                        string[] pms = line.Split(',');
+
+                        if (pms.Length < companyInfoNum)
+                        {
+                            break;
+                        }
+
+                        CompanyInfo companyInfo = new CompanyInfo();
+                        companyInfo.LiveliHood = pms[0];
+                        companyInfo.Normal = pms[1];
+                        companyInfo.HightConsumption = pms[2];
+
+                        listCompanyInfo.Add(companyInfo);
+
+                    }
+                }
+            }
+            #endregion
+
+            #region 信用卡信息存在
+            if (System.IO.File.Exists(iniPayFileName) == true)
+            {
+                using (StreamReader SR = new StreamReader(iniPayFileName))
+                {
+                    string line = null;
+
+                    while ((line = SR.ReadLine()) != null)
+                    {
+                        string[] pms = line.Split(',');
+
+                        if (pms.Length < payInfoNum)
+                        {
+                            break;
+                        }
+
+                        PayInfo payInfo = new PayInfo();
+                        payInfo.Name = pms[0];
+                        payInfo.BillDay = Convert.ToInt32(pms[1]);
+                        payInfo.PayDay = Convert.ToInt32(pms[2]);
+                        payInfo.PayLimit = Convert.ToDouble(pms[3]);
+                        payInfo.CostBase = Convert.ToDouble(pms[4]);
+                        payInfo.CostExtForSafe = Convert.ToDouble(pms[5]);
+
+                        listPayInfo.Add(payInfo);
+                    }
+                }
+            }
+            #endregion
+            
+        }
+
+        private void dataGridPayInfo_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             e.Row.Header = e.Row.GetIndex() + 1;
         }
 
-        void dataGridExcel_UnloadingRow(object sender, DataGridRowEventArgs e)
+        void dataGridPayInfo_UnloadingRow(object sender, DataGridRowEventArgs e)
         {
-            dataGridExcel_LoadingRow(sender, e);
-            if (dataGridExcel.Items != null)
+            if (dataGridPayInfo.Items != null)
             {
-                for (int i = 0; i < dataGridExcel.Items.Count; i++)
+                for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
                 {
                     try
                     {
-                        DataGridRow row = dataGridExcel.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
+                        DataGridRow row = dataGridPayInfo.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
                         if (row != null)
                         {
                             row.Header = (i + 1).ToString();
                         }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        LogToolsEx.Error2File(EORLog, "dataPayInfo_UnloadingRow ex={0}", ex);
+                    }
+
                 }
             }
 
         }
 
-        void dataCompany_UnloadingRow(object sender, DataGridRowEventArgs e)
+        void dataGridCompany_UnloadingRow(object sender, DataGridRowEventArgs e)
         {
-            dataGridExcel_LoadingRow(sender, e);
-            if (dataCompany.Items != null)
+            if (dataGridCompanyInfo.Items != null)
             {
-                for (int i = 0; i < dataCompany.Items.Count; i++)
+                for (int i = 0; i < dataGridCompanyInfo.Items.Count; i++)
                 {
                     try
                     {
-                        DataGridRow row = dataCompany.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
+                        DataGridRow row = dataGridCompanyInfo.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
                         if (row != null)
                         {
                             row.Header = (i + 1).ToString();
                         }
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        LogToolsEx.Error2File(EORLog, "dataCompany_UnloadingRow ex={0}", ex);
+                    }
                 }
             }
 
         }
+        
 
-
-        private void btnBrowse_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openDlg = new OpenFileDialog();
-            openDlg.Filter = "Excel文件|*.xls|Excel文件|*.xlsx";
-            openDlg.RestoreDirectory = true;
-            bool? bResult = openDlg.ShowDialog();
-            if (bResult.HasValue && bResult.Value == true)
-            {
-                strFullPath = openDlg.FileName;
-                //tbFullPath.Text = strFullPath;
-            }
-
-        }
 
         private void btnAddARow_Click(object sender, RoutedEventArgs e)
         {
             listPayInfo.Add(new PayInfo());
-            //dataGridExcel.Items.Add(new DataGridRow());
-            dataGridExcel.ItemsSource = null;
-            dataGridExcel.ItemsSource = listPayInfo;
+            dataGridPayInfo.ItemsSource = null;
+            dataGridPayInfo.ItemsSource = listPayInfo;
         }
 
         private void dataGridExcel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dataGridExcel.SelectedItems.Count == 1)
+            if (dataGridPayInfo.SelectedItems.Count == 1)
             {
                 cbTrunCostBase.IsChecked = false;
                 cbTrunCostExtForSafe.IsChecked = false;
 
-                if ((dataGridExcel.SelectedItems[0] as PayInfo) != null)
+                if ((dataGridPayInfo.SelectedItems[0] as PayInfo) != null)
                 {
-                    CurrentPayInfo = dataGridExcel.SelectedItems[0] as PayInfo;
+                    CurrentPayInfo = dataGridPayInfo.SelectedItems[0] as PayInfo;
                     tbCostBase.Text = CurrentPayInfo.CostBase.ToString();
                     tbCostExtForSafe.Text = CurrentPayInfo.CostExtForSafe.ToString();
                 }
@@ -193,12 +252,62 @@ namespace ProductExcel
             return true;
         }
 
+        private void SavePayInfo()
+        {
+
+            using (StreamWriter SW = new StreamWriter(iniPayFileName))
+            {
+                string line = null;
+
+                for (int i = 0; i < dataGridPayInfo.Items.Count; i++ )
+                {
+                    if (dataGridPayInfo.Items[i] is PayInfo)
+                    {
+                        PayInfo payInfo = (PayInfo)dataGridPayInfo.Items[i];
+                        string[] rgPayInfo = new string[payInfoNum];
+                        rgPayInfo[0] = payInfo.Name;
+                        rgPayInfo[1] = payInfo.BillDay.ToString();
+                        rgPayInfo[2] = payInfo.PayDay.ToString();
+                        rgPayInfo[3] = payInfo.PayLimit.ToString();
+                        rgPayInfo[4] = payInfo.CostBase.ToString();
+                        rgPayInfo[5] = payInfo.CostExtForSafe.ToString();
+                        line = string.Join(",", rgPayInfo);
+                        SW.WriteLine(line);
+                    }
+                }
+            }
+        }
+
+        private void btSaveComany_Click(object sender, RoutedEventArgs e)
+        {            
+            using (StreamWriter SW = new StreamWriter(iniCompanyFileName))
+            {
+                string line = null;
+
+                for (int i = 0; i < dataGridCompanyInfo.Items.Count; i++ )
+                {
+                    if (dataGridCompanyInfo.Items[i] is CompanyInfo)
+                    {
+                        CompanyInfo companyInfo = (CompanyInfo)dataGridCompanyInfo.Items[i];
+                        string[] rgComanyInfo = new string[companyInfoNum];
+                        rgComanyInfo[0] = companyInfo.LiveliHood;
+                        rgComanyInfo[1] = companyInfo.Normal;
+                        rgComanyInfo[2] = companyInfo.HightConsumption;
+                        line = string.Join(",", rgComanyInfo);
+                        SW.WriteLine(line);
+                    }
+                }
+            }
+        }
+
         private void btOutPutExcel_Click(object sender, RoutedEventArgs e)
         {
             if (false == CheckPayInfoOK())
             {
                 return;
             }
+
+            SavePayInfo();
 
             SaveFileDialog sd = new SaveFileDialog();
             sd.Filter = "Excel文档|*.xls";
@@ -221,6 +330,7 @@ namespace ProductExcel
                 FileStream file = File.OpenRead(fullName);
                 IWorkbook workbook = new HSSFWorkbook(file);
 
+                //保存信用卡信息
                 int PayDayCount = Convert.ToInt32(comboPayDayCount.SelectedValue);
                 for (int i = 1; i <= PayDayCount; i++)//遍历页数
                 {
@@ -241,12 +351,29 @@ namespace ProductExcel
                     }
 
                 }
+
+                //保存商户
+                {
+                    int row = 1;
+                    int col = 0;
+                    ISheet sheet = workbook.GetSheet("库");
+                    foreach(CompanyInfo companyInfo in listCompanyInfo)
+                    {
+                        sheet.GetRow(row).GetCell(col).SetCellValue(companyInfo.LiveliHood);
+                        sheet.GetRow(row).GetCell(col + 1).SetCellValue(companyInfo.Normal);
+                        sheet.GetRow(row).GetCell(col + 2).SetCellValue(companyInfo.HightConsumption);
+                        row++;
+                    }
+
+                }
                 using (FileStream fs = File.OpenWrite(fullName))
                 {
-                    workbook.Write(fs);                    
-                } 
+                    workbook.Write(fs);
+                }
             }
         }
+
+      
     }
 }
 

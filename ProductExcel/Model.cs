@@ -21,18 +21,6 @@ namespace ProductExcel
             }
         }
 
-        //手续费
-        protected double m_PayExt = 0;
-        public double PayExt
-        {
-            get { return this.m_PayExt; }
-            set
-            {
-                this.m_PayExt = value;
-                NotifyPropertyChanged("PayExt");
-            }
-        }
-
         //账单日
         protected int m_BillDay = 1;
         public int BillDay
@@ -96,7 +84,6 @@ namespace ProductExcel
         public PayInfo(string Name, double PayExt, int BillDay, int PayDay, double PayLimit, double CostBase, double CostExtForSafe)
         {
             this.Name = Name;
-            this.PayExt = PayExt;
             this.BillDay = BillDay;
             this.PayDay = PayDay;
             this.PayLimit = PayLimit;
@@ -107,7 +94,6 @@ namespace ProductExcel
         public PayInfo()
         {
             this.Name = "";
-            this.PayExt = 0.0;
             this.BillDay = 1;
             this.PayDay = 1;
             this.PayLimit = 0;
@@ -177,12 +163,12 @@ namespace ProductExcel
     }
 
 
-    public class PayModeInfo
+    public class PayAssignModeInfo
     {
         public int ModeDayCount = 0;
         public List<int> listDaysAssign;
 
-        public PayModeInfo()
+        public PayAssignModeInfo()
         {
             ModeDayCount = 0;
             listDaysAssign = new List<int>();
