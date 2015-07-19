@@ -64,7 +64,7 @@
                     <TextBlock  Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Text="%"></TextBlock>
                     <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3"></CheckBox>
                     
-                    <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" ></Button>
+                    <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" ></Button>
                 </Grid>
 
             </TabItem>

@@ -128,69 +128,7 @@ namespace ProductExcel
                 //tbFullPath.Text = strFullPath;
             }
 
-        }
-
-        private void btnProductThree_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (strFullPath.Length == 0)
-                {
-                    MessageBox.Show("未选中文件");
-                    return;
-                }
-
-                // 返回对象
-                object objRtn = new object();
-
-                // 获得一个ExcelMacroHelper对象
-                ExcelMacroHelper excelMacroHelper = new ExcelMacroHelper();
-
-                // 执行指定Excel中的宏，执行时显示Excel
-                excelMacroHelper.RunExcelMacro(
-                                                    strFullPath,
-                                                    "三天",
-                                                    new Object[] {},
-                                                    out objRtn,
-                                                    true
-                                              );
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void btnProductSix_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (strFullPath.Length == 0)
-                {
-                    MessageBox.Show("未选中文件");
-                    return;
-                }
-
-                // 返回对象
-                object objRtn = new object();
-
-                // 获得一个ExcelMacroHelper对象
-                ExcelMacroHelper excelMacroHelper = new ExcelMacroHelper();
-
-                // 执行指定Excel中的宏，执行时显示Excel
-                excelMacroHelper.RunExcelMacro(
-                                                    strFullPath,
-                                                    "六天",
-                                                    new Object[] { },
-                                                    out objRtn,
-                                                    true
-                                              );
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+        }       
 
         private void btnAddARow_Click(object sender, RoutedEventArgs e)
         {
@@ -239,6 +177,20 @@ namespace ProductExcel
                 {
                     CurrentPayInfo.CostExtForSafe = Convert.ToDouble(tbCostExtForSafe.Text);
                 }
+            }
+        }
+
+        private void btOutPutExcel_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sd = new SaveFileDialog();
+            sd.Filter = "Excel文档|*.xls";
+            sd.Title = "导出excel";
+
+            bool? bResult = sd.ShowDialog();
+            if (bResult.HasValue && bResult.Value == true)
+            {
+                string fullName = sd.FileName;
+                //string fileName = sd.FileName.Substring(0, sd.FileName.Length - ".xls".Length);
             }
         }        
     }
