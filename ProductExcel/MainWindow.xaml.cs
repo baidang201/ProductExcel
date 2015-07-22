@@ -41,10 +41,23 @@ namespace ProductExcel
         int companyInfoNum = 3;
         int payInfoNum = 6;
 
-        static private string strFullPath = "";
         static private int MaxLine = 100;
         static private List<PayInfo> listPayInfo = new List<PayInfo>();
         static private List<CompanyInfo> listCompanyInfo = new List<CompanyInfo>();
+        static private Dictionary<int, int> dicPayModeCount = new Dictionary<int, int>() 
+        { 
+            {3, 6},
+            {4, 10},
+            {5, 10},
+            {6, 10},
+            {7, 10},
+            {8, 10},
+            {9, 10},
+            {10, 10},
+        };
+
+
+
 
         public PayInfo CurrentPayInfo = null;
 
@@ -76,10 +89,12 @@ namespace ProductExcel
         void initGUI()
         {
             comboPayDayCount.ItemsSource = new int[] { 3, 4, 5, 6, 7, 8, 9, 10 };
-            comboPayMode.ItemsSource = new string[] { "模式1", "模式2", "模式3", "模式4" };
-
             comboPayDayCount.SelectedIndex = 0;
+
+            comboCostBase.ItemsSource = new double[] { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
             comboPayMode.SelectedIndex = 0;
+
+            changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
         }
 
         void initINI()
@@ -142,6 +157,25 @@ namespace ProductExcel
             }
             #endregion
             
+        }
+
+        void changePayModeItemSource(int day)
+        {
+            List<string> listPayMode = new List<string>();
+
+            if (false == dicPayModeCount.Any(r => r.Key == day))
+            {
+                comboPayMode.ItemsSource = null;
+                return;
+            }
+            
+
+            for (int i = 0; i < dicPayModeCount[day]; i++)
+            {
+                listPayMode.Add("模式" + (i + 1).ToString());
+            }
+            comboPayMode.ItemsSource = listPayMode;
+            comboPayMode.SelectedIndex = 0;
         }
 
         private void dataGridPayInfo_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -215,7 +249,7 @@ namespace ProductExcel
                 if ((dataGridPayInfo.SelectedItems[0] as PayInfo) != null)
                 {
                     CurrentPayInfo = dataGridPayInfo.SelectedItems[0] as PayInfo;
-                    tbCostBase.Text = CurrentPayInfo.CostBase.ToString();
+                    comboCostBase.SelectedIndex = comboCostBase.Items.IndexOf( CurrentPayInfo.CostBase);
                     tbCostExtForSafe.Text = CurrentPayInfo.CostExtForSafe.ToString();
                 }
             }
@@ -225,16 +259,6 @@ namespace ProductExcel
             }
         }
 
-        private void tbCostBase_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (null != CurrentPayInfo)
-            {
-                if (!string.IsNullOrEmpty(tbCostBase.Text.Trim()))
-                {
-                    CurrentPayInfo.CostBase = Convert.ToDouble(tbCostBase.Text);
-                }
-            }
-        }
 
         private void tbCostExtForSafe_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -371,6 +395,24 @@ namespace ProductExcel
                     workbook.Write(fs);
                 }
             }
+        }
+
+        private void comboPayDayCount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
+        }
+
+        private void comboCostBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (null != CurrentPayInfo)
+            {
+               CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);                
+            }
+        }
+
+        private void btTesting_Click(object sender, RoutedEventArgs e)
+        {
+           
         }
 
       

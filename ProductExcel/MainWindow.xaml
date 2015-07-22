@@ -49,10 +49,10 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock  x:Name="PayDayCount" Grid.Row="0" Grid.Column="0" Margin="6,3" Text="还款天数:" HorizontalAlignment="Right" ></TextBlock>
-                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3,6,0"  Grid.Column="1" Height="24" VerticalAlignment="Top"></ComboBox>
+                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3,6,0"  Grid.Column="1" Height="24" VerticalAlignment="Top" SelectionChanged="comboPayDayCount_SelectionChanged"></ComboBox>
 
                     <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}"></TextBlock>
-                    <TextBox x:Name="tbCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" Text="0.5" TextChanged="tbCostBase_TextChanged" ></TextBox>
+                    <ComboBox x:Name="comboCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" SelectionChanged="comboCostBase_SelectionChanged"></ComboBox>
                     <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,3"></CheckBox>
 
 
@@ -67,6 +67,8 @@
 
                     <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" ></Button>
                     <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" ></TextBlock>
+                
+                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click"></Button>
                 </Grid>
 
             </TabItem>

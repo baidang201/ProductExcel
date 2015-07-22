@@ -180,6 +180,20 @@ namespace ProductExcel
                 listFirstSecondPayInfo.Add(new double());
             }
         }
+
+        public FirstSecondPayInfoUnion(List<double> listPay)
+        {
+            listFirstSecondPayInfo = new List<double>();
+            for (int i = 0; i < listPay.Count; i++)
+            {
+                if (i > 1)
+                {
+                    break;
+                }
+
+                listFirstSecondPayInfo.Add( listPay[i]);                
+            }
+        }
     }
 
     //一个单元的分布情况，
@@ -203,6 +217,7 @@ namespace ProductExcel
                 listFirstSecondPayInfoUnion.Add(new FirstSecondPayInfoUnion());
             }
         }
+
     }
 
     //3 - 10天的分配类,如表示3~7天情况的分布情况
