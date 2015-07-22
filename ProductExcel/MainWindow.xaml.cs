@@ -75,7 +75,7 @@ namespace ProductExcel
 
         void initGUI()
         {
-            comboPayDayCount.ItemsSource = new int[] { 3, 4, 5, 6, 7, 8, 9 };
+            comboPayDayCount.ItemsSource = new int[] { 3, 4, 5, 6, 7, 8, 9, 10 };
             comboPayMode.ItemsSource = new string[] { "模式1", "模式2", "模式3", "模式4" };
 
             comboPayDayCount.SelectedIndex = 0;

@@ -162,6 +162,64 @@ namespace ProductExcel
         }
     }
 
+    //一天内的消费，第一笔 第二笔。一天内的分布
+    public class FirstSecondPayInfoUnion
+    {
+        List<double> listFirstSecondPayInfo;
+
+        public FirstSecondPayInfoUnion()
+        {
+            listFirstSecondPayInfo = new List<double>();
+        }
+
+        public FirstSecondPayInfoUnion(int count)
+        {
+            listFirstSecondPayInfo = new List<double>();
+              for(int i=0; i<count; i++)
+            {
+                listFirstSecondPayInfo.Add(new double());
+            }
+        }
+    }
+
+    //一个单元的分布情况，
+    public class DaysUnionAssignInfo
+    {
+        public int DayCount;
+        public List<FirstSecondPayInfoUnion> listFirstSecondPayInfoUnion;
+
+        public DaysUnionAssignInfo()
+        {
+            DayCount = 0;
+            listFirstSecondPayInfoUnion = new List<FirstSecondPayInfoUnion>();
+        }
+
+        public DaysUnionAssignInfo(int count)
+        {
+            DayCount = count;
+            listFirstSecondPayInfoUnion = new List<FirstSecondPayInfoUnion>();
+            for(int i=0; i<count; i++)
+            {
+                listFirstSecondPayInfoUnion.Add(new FirstSecondPayInfoUnion());
+            }
+        }
+    }
+
+    //3 - 10天的分配类,如表示3~7天情况的分布情况
+    public class AssignInfo
+    {
+        Dictionary<int, DaysUnionAssignInfo> dicDaysUnionAssignInfo = new Dictionary<int, DaysUnionAssignInfo>();
+
+        public AssignInfo()
+        {
+            int minDay = 3;
+            int maxDay = 10;
+            for (int i = minDay; i < maxDay; i++)
+            {
+                dicDaysUnionAssignInfo.Add(i, new DaysUnionAssignInfo());
+            }
+        }
+    }
 
     public class PayAssignModeInfo
     {
