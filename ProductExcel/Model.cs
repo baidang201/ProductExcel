@@ -163,27 +163,27 @@ namespace ProductExcel
     }
 
     //一天内的消费，第一笔 第二笔。一天内的分布
-    public class FirstSecondPayInfoUnion
+    public class OneDayPlanPayInfo
     {
-        List<double> listFirstSecondPayInfo;
+        List<double> listOneDayPlanPayInfo;
 
-        public FirstSecondPayInfoUnion()
+        public OneDayPlanPayInfo()
         {
-            listFirstSecondPayInfo = new List<double>();
+            listOneDayPlanPayInfo = new List<double>();
         }
 
-        public FirstSecondPayInfoUnion(int count)
+        public OneDayPlanPayInfo(int count)
         {
-            listFirstSecondPayInfo = new List<double>();
+            listOneDayPlanPayInfo = new List<double>();
               for(int i=0; i<count; i++)
             {
-                listFirstSecondPayInfo.Add(new double());
+                listOneDayPlanPayInfo.Add(new double());
             }
         }
 
-        public FirstSecondPayInfoUnion(List<double> listPay)
+        public OneDayPlanPayInfo(List<double> listPay)
         {
-            listFirstSecondPayInfo = new List<double>();
+            listOneDayPlanPayInfo = new List<double>();
             for (int i = 0; i < listPay.Count; i++)
             {
                 if (i > 1)
@@ -191,48 +191,71 @@ namespace ProductExcel
                     break;
                 }
 
-                listFirstSecondPayInfo.Add( listPay[i]);                
+                listOneDayPlanPayInfo.Add( listPay[i]);                
             }
         }
     }
 
-    //一个单元的分布情况，
-    public class DaysUnionAssignInfo
+    //一种天数单元的分布情况，即所有天数的民生、普通、高消费列表。可表示3天 4天 ....
+    public class DaysPlanInfo
     {
         public int DayCount;
-        public List<FirstSecondPayInfoUnion> listFirstSecondPayInfoUnion;
+        public List<OneDayPlanPayInfo> listLiveliHoodPayInfoUnion;
+        public List<OneDayPlanPayInfo> listNormalPayInfoUnion;
+        public List<OneDayPlanPayInfo> listHightConsumptionPayInfoUnion;
 
-        public DaysUnionAssignInfo()
+        public DaysPlanInfo()
         {
             DayCount = 0;
-            listFirstSecondPayInfoUnion = new List<FirstSecondPayInfoUnion>();
+            listLiveliHoodPayInfoUnion = new List<OneDayPlanPayInfo>();
+            listNormalPayInfoUnion = new List<OneDayPlanPayInfo>();
+            listHightConsumptionPayInfoUnion = new List<OneDayPlanPayInfo>();
         }
 
-        public DaysUnionAssignInfo(int count)
+        public DaysPlanInfo(int count)
         {
             DayCount = count;
-            listFirstSecondPayInfoUnion = new List<FirstSecondPayInfoUnion>();
+            listLiveliHoodPayInfoUnion = new List<OneDayPlanPayInfo>();
+            listNormalPayInfoUnion = new List<OneDayPlanPayInfo>();
+            listHightConsumptionPayInfoUnion = new List<OneDayPlanPayInfo>();
+
             for(int i=0; i<count; i++)
             {
-                listFirstSecondPayInfoUnion.Add(new FirstSecondPayInfoUnion());
+                listLiveliHoodPayInfoUnion.Add(new OneDayPlanPayInfo());
+                listNormalPayInfoUnion.Add(new OneDayPlanPayInfo());
+                listHightConsumptionPayInfoUnion.Add(new OneDayPlanPayInfo());
             }
         }
 
+        public DaysPlanInfo(List<OneDayPlanPayInfo> listHoodPayInfo, 
+            List<OneDayPlanPayInfo> listNormalPayInfo,
+            List<OneDayPlanPayInfo> listHightConsumptionPayInfo
+            )
+        {
+            listLiveliHoodPayInfoUnion = listHoodPayInfo;
+            listNormalPayInfoUnion = listNormalPayInfo;
+            listHightConsumptionPayInfoUnion = listHightConsumptionPayInfo;
+            
+        }
     }
 
     //3 - 10天的分配类,如表示3~7天情况的分布情况
     public class AssignInfo
     {
-        Dictionary<int, DaysUnionAssignInfo> dicDaysUnionAssignInfo = new Dictionary<int, DaysUnionAssignInfo>();
-
+        Dictionary<int, DaysPlanInfo> dicDaysUnionAssignInfo = new Dictionary<int, DaysPlanInfo>();
+            
         public AssignInfo()
         {
             int minDay = 3;
             int maxDay = 10;
-            for (int i = minDay; i < maxDay; i++)
-            {
-                dicDaysUnionAssignInfo.Add(i, new DaysUnionAssignInfo());
-            }
+            dicDaysUnionAssignInfo.Add(
+                3, 
+                new DaysPlanInfo(
+                    new List<OneDayPlanPayInfo>(){new OneDayPlanPayInfo(new List<double> (){2,2}) },
+                    new List<OneDayPlanPayInfo>() { new OneDayPlanPayInfo(new List<double>() { 2, 2 }) },
+                    new List<OneDayPlanPayInfo>() { new OneDayPlanPayInfo(new List<double>() { 2, 2 }) } 
+                )
+            );    
         }
     }
 

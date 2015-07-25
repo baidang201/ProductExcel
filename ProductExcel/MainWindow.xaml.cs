@@ -19,11 +19,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Signalway.CommThemes;
 
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 
 using System.IO;
 using UtilityTool;
@@ -38,8 +33,9 @@ namespace ProductExcel
         string EORLog = @"EORLog.txt";
         string iniCompanyFileName = @"Company.ini";
         string iniPayFileName = @"PayFile.ini";
-        int companyInfoNum = 3;
-        int payInfoNum = 6;
+        string excelTempFieName = @"temp.ini";
+        int companyInfoMemberCount = 3;
+        int payInfoMemberCount = 6;
 
         static private int MaxLine = 100;
         static private List<PayInfo> listPayInfo = new List<PayInfo>();
@@ -56,7 +52,7 @@ namespace ProductExcel
             {10, 10},
         };
 
-
+        static RadomHelper radomHelper= new RadomHelper();
 
 
         public PayInfo CurrentPayInfo = null;
@@ -88,10 +84,10 @@ namespace ProductExcel
 
         void initGUI()
         {
-            comboPayDayCount.ItemsSource = new int[] { 3, 4, 5, 6, 7, 8, 9, 10 };
+            comboPayDayCount.ItemsSource = new int[] { 3, 4, 5, 6, 7, 8, 9, 10 };//天数
             comboPayDayCount.SelectedIndex = 0;
 
-            comboCostBase.ItemsSource = new double[] { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
+            comboCostBase.ItemsSource = new double[] { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };//成本
             comboPayMode.SelectedIndex = 0;
 
             changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
@@ -110,7 +106,7 @@ namespace ProductExcel
                     {
                         string[] pms = line.Split(',');
 
-                        if (pms.Length < companyInfoNum)
+                        if (pms.Length < companyInfoMemberCount)
                         {
                             break;
                         }
@@ -138,7 +134,7 @@ namespace ProductExcel
                     {
                         string[] pms = line.Split(',');
 
-                        if (pms.Length < payInfoNum)
+                        if (pms.Length < payInfoMemberCount)
                         {
                             break;
                         }
@@ -157,6 +153,11 @@ namespace ProductExcel
             }
             #endregion
             
+        }
+
+        void initLogicParam()
+        {
+
         }
 
         void changePayModeItemSource(int day)
@@ -288,7 +289,7 @@ namespace ProductExcel
                     if (dataGridPayInfo.Items[i] is PayInfo)
                     {
                         PayInfo payInfo = (PayInfo)dataGridPayInfo.Items[i];
-                        string[] rgPayInfo = new string[payInfoNum];
+                        string[] rgPayInfo = new string[payInfoMemberCount];
                         rgPayInfo[0] = payInfo.Name;
                         rgPayInfo[1] = payInfo.BillDay.ToString();
                         rgPayInfo[2] = payInfo.PayDay.ToString();
@@ -313,7 +314,7 @@ namespace ProductExcel
                     if (dataGridCompanyInfo.Items[i] is CompanyInfo)
                     {
                         CompanyInfo companyInfo = (CompanyInfo)dataGridCompanyInfo.Items[i];
-                        string[] rgComanyInfo = new string[companyInfoNum];
+                        string[] rgComanyInfo = new string[companyInfoMemberCount];
                         rgComanyInfo[0] = companyInfo.LiveliHood;
                         rgComanyInfo[1] = companyInfo.Normal;
                         rgComanyInfo[2] = companyInfo.HightConsumption;
@@ -321,6 +322,19 @@ namespace ProductExcel
                         SW.WriteLine(line);
                     }
                 }
+            }
+        }
+
+        private void comboPayDayCount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
+        }
+
+        private void comboCostBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (null != CurrentPayInfo)
+            {
+               CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);                
             }
         }
 
@@ -341,72 +355,24 @@ namespace ProductExcel
             if (bResult.HasValue && bResult.Value == true)
             {
                 string fullName = sd.FileName;
-                //string fileName = sd.FileName.Substring(0, sd.FileName.Length - ".xls".Length);
-                string excelTemp = @"temp.ini";
-
-                Helper.CopyFileTo(excelTemp, fullName);
-
-                if (System.IO.File.Exists(fullName) == false)//该批任务中，文件已解压，则不需要解密
+                string strFailReason = "";
+                if (!ExcelHelper.OutPutExcel(excelTempFieName, 
+                    fullName, 
+                    Convert.ToInt32(comboPayDayCount.SelectedValue), 
+                    Convert.ToInt32(comboPayMode.SelectedIndex),
+                    listPayInfo, 
+                    listCompanyInfo, 
+                    radomHelper,
+                    ref strFailReason))
                 {
-                    return;
+                    MessageBox.Show("导出完成");
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("导出失败。原因为：%s", strFailReason));
                 }
 
-                FileStream file = File.OpenRead(fullName);
-                IWorkbook workbook = new HSSFWorkbook(file);
 
-                //保存信用卡信息
-                int PayDayCount = Convert.ToInt32(comboPayDayCount.SelectedValue);
-                for (int i = 1; i <= PayDayCount; i++)//遍历页数
-                {
-                    ISheet sheet = workbook.GetSheet(i.ToString());
-
-                    int beginRow = 4;
-                    int beginCol = 0;
-                    int row = beginRow;
-                    int col = beginCol;
-
-                    foreach (PayInfo payInfo in listPayInfo)
-                    {
-                        sheet.GetRow(row).GetCell(col).SetCellValue(payInfo.Name);
-                        sheet.GetRow(row).GetCell(col + 1).SetCellValue(payInfo.BillDay);
-                        sheet.GetRow(row).GetCell(col + 2).SetCellValue(payInfo.PayDay);
-                        sheet.GetRow(row).GetCell(col + 3).SetCellValue(payInfo.PayLimit);
-                        row++;
-                    }
-
-                }
-
-                //保存商户
-                {
-                    int row = 1;
-                    int col = 0;
-                    ISheet sheet = workbook.GetSheet("库");
-                    foreach(CompanyInfo companyInfo in listCompanyInfo)
-                    {
-                        sheet.GetRow(row).GetCell(col).SetCellValue(companyInfo.LiveliHood);
-                        sheet.GetRow(row).GetCell(col + 1).SetCellValue(companyInfo.Normal);
-                        sheet.GetRow(row).GetCell(col + 2).SetCellValue(companyInfo.HightConsumption);
-                        row++;
-                    }
-
-                }
-                using (FileStream fs = File.OpenWrite(fullName))
-                {
-                    workbook.Write(fs);
-                }
-            }
-        }
-
-        private void comboPayDayCount_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
-        }
-
-        private void comboCostBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (null != CurrentPayInfo)
-            {
-               CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);                
             }
         }
 
@@ -414,6 +380,7 @@ namespace ProductExcel
         {
            
         }
+
 
       
     }

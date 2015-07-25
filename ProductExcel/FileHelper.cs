@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductExcel
 {
-    public class Helper
+    public class FileHelper
     {
         // <summary>
         /// 从一个目录将其内容移动到另一目录
