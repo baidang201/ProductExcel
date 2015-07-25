@@ -1,0 +1,165 @@
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){34}),
+new OneDayPlanPayInfo(new List<double> (){30}),
+new OneDayPlanPayInfo(new List<double> (){36}),
+
+
+
+
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){20}),
+new OneDayPlanPayInfo(new List<double> (){15, 17}),
+new OneDayPlanPayInfo(new List<double> (){23}),
+new OneDayPlanPayInfo(new List<double> (){25}),
+
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){18}),
+new OneDayPlanPayInfo(new List<double> (){11, 12}),
+new OneDayPlanPayInfo(new List<double> (){23}),
+new OneDayPlanPayInfo(new List<double> (){19}),
+new OneDayPlanPayInfo(new List<double> (){17}),
+
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){15}),
+new OneDayPlanPayInfo(new List<double> (){12, 6}),
+new OneDayPlanPayInfo(new List<double> (){18}),
+new OneDayPlanPayInfo(new List<double> (){17}),
+new OneDayPlanPayInfo(new List<double> (){11, 5}),
+new OneDayPlanPayInfo(new List<double> (){16}),
+
+
+
+
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){12.5}),
+new OneDayPlanPayInfo(new List<double> (){17}),
+new OneDayPlanPayInfo(new List<double> (){12}),
+new OneDayPlanPayInfo(new List<double> (){13}),
+new OneDayPlanPayInfo(new List<double> (){14}),
+new OneDayPlanPayInfo(new List<double> (){16.5}),
+new OneDayPlanPayInfo(new List<double> (){15}),
+
+
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){13}),
+new OneDayPlanPayInfo(new List<double> (){10}),
+new OneDayPlanPayInfo(new List<double> (){12}),
+new OneDayPlanPayInfo(new List<double> (){15}),
+new OneDayPlanPayInfo(new List<double> (){7, 6}),
+new OneDayPlanPayInfo(new List<double> (){11}),
+new OneDayPlanPayInfo(new List<double> (){13.5}),
+new OneDayPlanPayInfo(new List<double> (){12.5}),
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){13}),
+new OneDayPlanPayInfo(new List<double> (){10}),
+new OneDayPlanPayInfo(new List<double> (){8}),
+new OneDayPlanPayInfo(new List<double> (){11}),
+new OneDayPlanPayInfo(new List<double> (){7, 9}),
+new OneDayPlanPayInfo(new List<double> (){14}),
+new OneDayPlanPayInfo(new List<double> (){7.5}),
+new OneDayPlanPayInfo(new List<double> (){12}),
+new OneDayPlanPayInfo(new List<double> (){8.5}),
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){9.5}),
+new OneDayPlanPayInfo(new List<double> (){6, 5}),
+new OneDayPlanPayInfo(new List<double> (){11}),
+new OneDayPlanPayInfo(new List<double> (){7}),
+new OneDayPlanPayInfo(new List<double> (){4, 4.5}),
+new OneDayPlanPayInfo(new List<double> (){12}),
+new OneDayPlanPayInfo(new List<double> (){10}),
+new OneDayPlanPayInfo(new List<double> (){11.5}),
+new OneDayPlanPayInfo(new List<double> (){9}),
+new OneDayPlanPayInfo(new List<double> (){10.5}),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+new OneDayPlanPayInfo(new List<double> (){9.5}),
+new OneDayPlanPayInfo(new List<double> (){6, 5}),
+new OneDayPlanPayInfo(new List<double> (){11}),
+new OneDayPlanPayInfo(new List<double> (){7}),
+new OneDayPlanPayInfo(new List<double> (){4, 4.5}),
+new OneDayPlanPayInfo(new List<double> (){12}),
+new OneDayPlanPayInfo(new List<double> (){10}),
+new OneDayPlanPayInfo(new List<double> (){11.5}),
+new OneDayPlanPayInfo(new List<double> (){9}),
+new OneDayPlanPayInfo(new List<double> (){10.5}),

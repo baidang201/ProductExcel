@@ -175,7 +175,7 @@ namespace ProductExcel
         public OneDayPlanPayInfo(int count)
         {
             listOneDayPlanPayInfo = new List<double>();
-              for(int i=0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 listOneDayPlanPayInfo.Add(new double());
             }
@@ -191,7 +191,7 @@ namespace ProductExcel
                     break;
                 }
 
-                listOneDayPlanPayInfo.Add( listPay[i]);                
+                listOneDayPlanPayInfo.Add(listPay[i]);
             }
         }
     }
@@ -219,7 +219,7 @@ namespace ProductExcel
             listNormalPayInfoUnion = new List<OneDayPlanPayInfo>();
             listHightConsumptionPayInfoUnion = new List<OneDayPlanPayInfo>();
 
-            for(int i=0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
                 listLiveliHoodPayInfoUnion.Add(new OneDayPlanPayInfo());
                 listNormalPayInfoUnion.Add(new OneDayPlanPayInfo());
@@ -227,7 +227,7 @@ namespace ProductExcel
             }
         }
 
-        public DaysPlanInfo(List<OneDayPlanPayInfo> listHoodPayInfo, 
+        public DaysPlanInfo(List<OneDayPlanPayInfo> listHoodPayInfo,
             List<OneDayPlanPayInfo> listNormalPayInfo,
             List<OneDayPlanPayInfo> listHightConsumptionPayInfo
             )
@@ -235,7 +235,7 @@ namespace ProductExcel
             listLiveliHoodPayInfoUnion = listHoodPayInfo;
             listNormalPayInfoUnion = listNormalPayInfo;
             listHightConsumptionPayInfoUnion = listHightConsumptionPayInfo;
-            
+
         }
     }
 
@@ -243,19 +243,283 @@ namespace ProductExcel
     public class AssignInfo
     {
         Dictionary<int, DaysPlanInfo> dicDaysUnionAssignInfo = new Dictionary<int, DaysPlanInfo>();
-            
+
         public AssignInfo()
         {
             int minDay = 3;
             int maxDay = 10;
             dicDaysUnionAssignInfo.Add(
-                3, 
+                3,
                 new DaysPlanInfo(
-                    new List<OneDayPlanPayInfo>(){new OneDayPlanPayInfo(new List<double> (){2,2}) },
-                    new List<OneDayPlanPayInfo>() { new OneDayPlanPayInfo(new List<double>() { 2, 2 }) },
-                    new List<OneDayPlanPayInfo>() { new OneDayPlanPayInfo(new List<double>() { 2, 2 }) } 
+                    new List<OneDayPlanPayInfo>(){ 
+                        new OneDayPlanPayInfo(new List<double> (){34}),//0
+                        new OneDayPlanPayInfo(new List<double> (){30}),//1
+                        new OneDayPlanPayInfo(new List<double> (){36}),//2
+                    },
+                    new List<OneDayPlanPayInfo>() { 
+                        new OneDayPlanPayInfo(new List<double> (){28}),//0
+                        new OneDayPlanPayInfo(new List<double> (){23,18}),//1
+                        new OneDayPlanPayInfo(new List<double> (){31}),//2
+                    },
+                    new List<OneDayPlanPayInfo>() { 
+                        new OneDayPlanPayInfo(new List<double> (){38}),//0
+                        new OneDayPlanPayInfo(new List<double> (){27}),//1
+                        new OneDayPlanPayInfo(new List<double> (){35}),//2
+                    }
                 )
-            );    
+            );
+
+            dicDaysUnionAssignInfo.Add(
+                4,
+                new DaysPlanInfo(
+                    new List<OneDayPlanPayInfo>(){ 
+                        new OneDayPlanPayInfo(new List<double> (){20}),
+                        new OneDayPlanPayInfo(new List<double> (){15, 17}),
+                        new OneDayPlanPayInfo(new List<double> (){23}),
+                        new OneDayPlanPayInfo(new List<double> (){25}),
+                    },
+                    new List<OneDayPlanPayInfo>()
+                    {
+                        new OneDayPlanPayInfo(new List<double> (){23,13}),
+                        new OneDayPlanPayInfo(new List<double> (){17}),
+                        new OneDayPlanPayInfo(new List<double> (){23}),
+                        new OneDayPlanPayInfo(new List<double> (){24}),
+                    },
+                    new List<OneDayPlanPayInfo>()
+                    {
+                        new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){26}),
+                        new OneDayPlanPayInfo(new List<double> (){31}),
+                        new OneDayPlanPayInfo(new List<double> (){16, 12}),
+                    }
+                )
+            );
+
+            dicDaysUnionAssignInfo.Add(
+               5,
+               new DaysPlanInfo(
+                   new List<OneDayPlanPayInfo>(){ 
+                        new OneDayPlanPayInfo(new List<double> (){18}),
+                        new OneDayPlanPayInfo(new List<double> (){11, 12}),
+                        new OneDayPlanPayInfo(new List<double> (){23}),
+                        new OneDayPlanPayInfo(new List<double> (){19}),
+                        new OneDayPlanPayInfo(new List<double> (){17}),
+                    },
+                   new List<OneDayPlanPayInfo>()
+                   {
+                       new OneDayPlanPayInfo(new List<double> (){6,19}),
+                        new OneDayPlanPayInfo(new List<double> (){18}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){9,10}),
+                        new OneDayPlanPayInfo(new List<double> (){25}),
+                   },
+                   new List<OneDayPlanPayInfo>()
+                   {
+                       new OneDayPlanPayInfo(new List<double> (){16}),
+                        new OneDayPlanPayInfo(new List<double> (){20}),
+                        new OneDayPlanPayInfo(new List<double> (){12, 13}),
+                        new OneDayPlanPayInfo(new List<double> (){22}),
+                        new OneDayPlanPayInfo(new List<double> (){17}),
+                   }
+               )
+           );
+
+            dicDaysUnionAssignInfo.Add(
+              6,
+              new DaysPlanInfo(
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){12, 6}),
+                        new OneDayPlanPayInfo(new List<double> (){18}),
+                        new OneDayPlanPayInfo(new List<double> (){17}),
+                        new OneDayPlanPayInfo(new List<double> (){11, 5}),
+                        new OneDayPlanPayInfo(new List<double> (){16}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){18}),
+                        new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){10,7}),
+                        new OneDayPlanPayInfo(new List<double> (){14}),
+                        new OneDayPlanPayInfo(new List<double> (){11,9}),
+                        new OneDayPlanPayInfo(new List<double> (){16}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){24}),
+                        new OneDayPlanPayInfo(new List<double> (){11, 12}),
+                        new OneDayPlanPayInfo(new List<double> (){8}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){17}),
+                        new OneDayPlanPayInfo(new List<double> (){6, 9}),
+                  }
+              )
+          );
+
+            dicDaysUnionAssignInfo.Add(
+              7,
+              new DaysPlanInfo(
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){12.5}),
+                        new OneDayPlanPayInfo(new List<double> (){17}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){14}),
+                        new OneDayPlanPayInfo(new List<double> (){16.5}),
+                        new OneDayPlanPayInfo(new List<double> (){15}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){8,7}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){11,6}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){16}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){17.5}),
+                        new OneDayPlanPayInfo(new List<double> (){16}),
+                        new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){9, 10.5}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){11.5}),
+                        new OneDayPlanPayInfo(new List<double> (){9.5}),
+                  }
+              )
+          );
+
+            dicDaysUnionAssignInfo.Add(
+              8,
+              new DaysPlanInfo(
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){7, 6}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){13.5}),
+                        new OneDayPlanPayInfo(new List<double> (){12.5}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){8,5}),
+                        new OneDayPlanPayInfo(new List<double> (){14.5}),
+                        new OneDayPlanPayInfo(new List<double> (){9}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){13.5}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){14}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){15}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){7, 5}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){12.5}),
+                        new OneDayPlanPayInfo(new List<double> (){14}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){11.5}),
+                  }
+              )
+          );
+
+            dicDaysUnionAssignInfo.Add(
+              9,
+              new DaysPlanInfo(
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){8}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){7, 9}),
+                        new OneDayPlanPayInfo(new List<double> (){14}),
+                        new OneDayPlanPayInfo(new List<double> (){7.5}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){8.5}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){5,6}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){9}),
+                        new OneDayPlanPayInfo(new List<double> (){11.5}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){10.5}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){6, 5}),
+                        new OneDayPlanPayInfo(new List<double> (){9}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){11.5}),
+                        new OneDayPlanPayInfo(new List<double> (){10.5}),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                  }
+              )
+          );
+
+            dicDaysUnionAssignInfo.Add(
+              10,
+              new DaysPlanInfo(
+                  new List<OneDayPlanPayInfo>()
+                  {
+                    new OneDayPlanPayInfo(new List<double> (){9.5}),
+                    new OneDayPlanPayInfo(new List<double> (){6, 5}),
+                    new OneDayPlanPayInfo(new List<double> (){11}),
+                    new OneDayPlanPayInfo(new List<double> (){7}),
+                    new OneDayPlanPayInfo(new List<double> (){4, 4.5}),
+                    new OneDayPlanPayInfo(new List<double> (){12}),
+                    new OneDayPlanPayInfo(new List<double> (){10}),
+                    new OneDayPlanPayInfo(new List<double> (){11.5}),
+                    new OneDayPlanPayInfo(new List<double> (){9}),
+                    new OneDayPlanPayInfo(new List<double> (){10.5}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){7}),
+                        new OneDayPlanPayInfo(new List<double> (){8,3.5}),
+                        new OneDayPlanPayInfo(new List<double> (){7.5}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){9}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                        new OneDayPlanPayInfo(new List<double> (){4}),
+                        new OneDayPlanPayInfo(new List<double> (){9.5,8.5}),
+                  },
+                  new List<OneDayPlanPayInfo>()
+                  {
+                      new OneDayPlanPayInfo(new List<double> (){7.5, 8.5}),
+                       new OneDayPlanPayInfo(new List<double> ()),
+                        new OneDayPlanPayInfo(new List<double> (){13}),
+                        new OneDayPlanPayInfo(new List<double> (){11.5}),
+                        new OneDayPlanPayInfo(new List<double> (){11}),
+                        new OneDayPlanPayInfo(new List<double> (){5, 7}),
+                        new OneDayPlanPayInfo(new List<double> (){10}),
+                        new OneDayPlanPayInfo(new List<double> (){8}),
+                        new OneDayPlanPayInfo(new List<double> (){6.5}),
+                        new OneDayPlanPayInfo(new List<double> (){12}),
+                  }
+              )
+          );
+
+
         }
     }
 
