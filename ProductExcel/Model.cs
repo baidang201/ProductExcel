@@ -17,7 +17,20 @@ namespace ProductExcel
             set
             {
                 this.m_Name = value;
+                NameAfterTrim = value.Trim();
                 NotifyPropertyChanged("Name");
+            }
+        }
+
+        //名字去空格后
+        protected string m_NameAfterTrime = "";
+        public string NameAfterTrim
+        {
+            get { return this.m_NameAfterTrime; }
+            set
+            {
+                this.m_NameAfterTrime = value;
+                NotifyPropertyChanged("NameAfterTrime");
             }
         }
 
@@ -165,7 +178,7 @@ namespace ProductExcel
     //一天内的消费，第一笔 第二笔。一天内的分布
     public class OneDayPlanPayInfo
     {
-        List<double> listOneDayPlanPayInfo;
+        public List<double> listOneDayPlanPayInfo;
 
         public OneDayPlanPayInfo()
         {
@@ -242,12 +255,40 @@ namespace ProductExcel
     //3 - 10天的分配类,如表示3~7天情况的分布情况
     public class AssignInfo
     {
-        Dictionary<int, DaysPlanInfo> dicDaysUnionAssignInfo = new Dictionary<int, DaysPlanInfo>();
-
+        public Dictionary<int, DaysPlanInfo> dicDaysUnionAssignInfo = new Dictionary<int, DaysPlanInfo>();
+        public Dictionary<double, List<double>> dicAmountAssign = new Dictionary<double, List<double>>();
+        
         public AssignInfo()
         {
             int minDay = 3;
             int maxDay = 10;
+
+            dicAmountAssign.Add(
+                0.5,
+                new List<double>() { 0.78, 0.17, 0.06 }
+                );
+            dicAmountAssign.Add(
+                0.6,
+                new List<double>() { 0.59, 0.31, 0.11 }
+                );
+            dicAmountAssign.Add(
+                0.7,
+                new List<double>() { 0.385, 0.475, 0.15 }
+                );
+            dicAmountAssign.Add(
+                0.8,
+                new List<double>() { 0.265, 0.485, 0.26 }
+                );
+            dicAmountAssign.Add(
+                0.9,
+                new List<double>() { 0.155, 0.475, 0.38 }
+                );
+            dicAmountAssign.Add(
+                1.0,
+                new List<double>() { 0.125, 0.32, 0.565 }
+                );
+
+
             dicDaysUnionAssignInfo.Add(
                 3,
                 new DaysPlanInfo(
@@ -521,6 +562,13 @@ namespace ProductExcel
 
 
         }
+    }
+
+
+    public class ExcelInfo
+    {
+        public double realMount;
+        int PayDaysCount; 
     }
 
     public class PayAssignModeInfo

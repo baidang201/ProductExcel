@@ -44,7 +44,16 @@ namespace ProductExcel
             return sum;
         }
 
-        //n<11   s.len<11    k<n!       //求n个数的全排列中，第k位的数组s是多少
+        //n<11   s.len<11    k<n!       //求n个数的全排列中，第k位的数组s是多少 (k的下标从0开始)
+        //排列规则，如  n = 3, k = 5;  =>3, 2, 1
+        /*
+         * 1, 2, 3  
+         * 1, 3, 2  
+         * 2, 1, 3  
+         * 2, 3, 1  
+         * 3, 1, 2  
+         * 3, 2, 1 
+        */
         static public void invKT(int n, int k, int[] s)
         {
             int t, j;//需要记录该数是否已在前面出现过

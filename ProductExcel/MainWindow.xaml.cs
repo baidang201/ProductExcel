@@ -274,6 +274,14 @@ namespace ProductExcel
 
         private bool CheckPayInfoOK()
         {
+            foreach(PayInfo payInfo in listPayInfo)
+            {
+                if (string.IsNullOrEmpty(payInfo.Name.Trim()))
+                {
+                    MessageBox.Show("有信息为空，请检查");
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -356,7 +364,7 @@ namespace ProductExcel
             {
                 string fullName = sd.FileName;
                 string strFailReason = "";
-                if (!ExcelHelper.OutPutExcel(excelTempFieName, 
+                if (ExcelHelper.OutPutExcel(excelTempFieName, 
                     fullName, 
                     Convert.ToInt32(comboPayDayCount.SelectedValue), 
                     Convert.ToInt32(comboPayMode.SelectedIndex),
@@ -369,7 +377,7 @@ namespace ProductExcel
                 }
                 else
                 {
-                    MessageBox.Show(string.Format("导出失败。原因为：%s", strFailReason));
+                    MessageBox.Show(string.Format("导出失败。原因为：{0}", strFailReason));
                 }
 
 
@@ -378,11 +386,8 @@ namespace ProductExcel
 
         private void btTesting_Click(object sender, RoutedEventArgs e)
         {
-           
-        }
-
-
-      
+            
+        }      
     }
 }
 

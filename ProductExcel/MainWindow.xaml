@@ -25,6 +25,15 @@
                 <DataGridTextColumn Width="*" Binding="{Binding Path=CostBase,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="成本" />
                 <DataGridTextColumn Width="*" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
             </DataGrid.Columns>
+            <!--<DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=NameAfterTrim}" Value="">
+                            <Setter Property="Background" Value="Yellow" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>-->
         </DataGrid>
 
         <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.Column="1">
@@ -66,9 +75,9 @@
                     <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3" Visibility="Hidden"></CheckBox>
 
                     <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" ></Button>
-                    <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" ></TextBlock>
+                    <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" Visibility="Hidden" ></TextBlock>
                 
-                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click"></Button>
+                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click" Visibility="Hidden"></Button>
                 </Grid>
 
             </TabItem>
