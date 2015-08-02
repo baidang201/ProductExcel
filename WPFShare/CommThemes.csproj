@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\NoShowZeroConvert.cs" />
     <Compile Include="Converters\StrToDoubleConvert.cs" />
     <Compile Include="Converters\StrToIntConvert.cs" />
     <Compile Include="Converters\PlateWidthConvert.cs" />

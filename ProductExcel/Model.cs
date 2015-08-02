@@ -107,10 +107,10 @@ namespace ProductExcel
         public PayInfo()
         {
             this.Name = "";
-            this.BillDay = 1;
-            this.PayDay = 1;
-            this.PayLimit = 0;
-            this.CostBase = 0.6;
+            this.BillDay = 0;
+            this.PayDay = 0;
+            this.PayLimit = 0.0;
+            this.CostBase = 0.0;
             this.CostExtForSafe = 2;
         }
 

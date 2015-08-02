@@ -4,11 +4,9 @@
         Icon="ProductNavi.ico"
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
-        Title="信用卡管理工具" Height="768" Width="1024">
+        Title="信用卡管理工具" Height="384" Width="1024">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+        <Grid.RowDefinitions>           
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -16,16 +14,39 @@
             <ColumnDefinition Width="5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <DataGrid x:Name="dataGridPayInfo" Grid.Row="2"  Grid.Column="0" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="700" SelectionChanged="dataGridExcel_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="2*" Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=BillDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="账单日" />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=PayDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="还款日" />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=PayLimit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="额度" />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=CostBase,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="成本" />
-                <DataGridTextColumn Width="*" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
-            </DataGrid.Columns>
-            <!--<DataGrid.CellStyle>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制"></Button>
+                <Button x:Name="btPaste" Grid.Row="0" Grid.Column="2" Margin="6,3" Content="粘贴" Click="btPaste_Click"></Button>
+                <Button x:Name="btClean" Grid.Row="0" Grid.Column="3" Margin="6,3" Content="清除" Click="btClean_Click"></Button>
+            </Grid>
+            <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionUnit="FullRow" SelectionMode="Single"  RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="2*" Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=BillDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntNoShowZeroConvert} }" Header="账单日" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=PayDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntNoShowZeroConvert} }" Header="还款日" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=PayLimit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleNoShowZeroConvert}}" Header="额度" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=CostBase,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleNoShowZeroConvert}}" IsReadOnly="True" Header="成本" />
+                    <DataGridTextColumn Width="*" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Copy" Command="{x:Static ApplicationCommands.Copy}"></MenuItem>
+                        <MenuItem Header="Paste" Command="{x:Static ApplicationCommands.Paste}"></MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <!--<DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=NameAfterTrim}" Value="">
@@ -34,9 +55,10 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>-->
-        </DataGrid>
+            </DataGrid>
+        </Grid>            
 
-        <TabControl Grid.Row="1" Grid.RowSpan="2" Grid.Column="1">
+        <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
             <TabItem x:Name="PaySetting" Header="参数设置" Height="23" VerticalAlignment="Top">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -88,6 +110,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -97,8 +120,9 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="格式说明:" Margin="6,3" VerticalAlignment="Center" HorizontalAlignment="Right"></TextBlock>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="商户名-法人" Margin="6,3"  VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-                    <Button x:Name="btSaveComany" Grid.Row="0"  Grid.Column="2"  Content="保存" Margin="6,3" Click="btSaveComany_Click" ></Button>
-                    <DataGrid x:Name="dataGridCompanyInfo" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24"  >
+                    <CheckBox x:Name="cbNeedModify" Grid.Row="0" Grid.Column="2">需要修改</CheckBox>
+                    <Button x:Name="btSaveComany" Grid.Row="0"  Grid.Column="3"  Content="保存" Margin="6,3" Click="btSaveComany_Click" ></Button>
+                    <DataGrid x:Name="dataGridCompanyInfo" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" IsEnabled="{Binding IsChecked,  ElementName=cbNeedModify, Mode=OneWay}" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="*" Binding="{Binding Path=LiveliHood,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="民生"   />
                             <DataGridTextColumn Width="*" Binding="{Binding Path=Normal,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="一般" />

@@ -14,4 +14,6 @@
     <converters:BoolToStrConvert x:Key="BoolToStrConvert" />
     <converters:RGBToBrushConvert x:Key="RGBToBrushConvert" />
     <converters:FunctionToBrushConvert x:Key="FunctionToBrushConvert" />
+    <converters:IntNoShowZeroConvert x:Key="IntNoShowZeroConvert" />
+    <converters:DoubleNoShowZeroConvert x:Key="DoubleNoShowZeroConvert" />
 </ResourceDictionary>

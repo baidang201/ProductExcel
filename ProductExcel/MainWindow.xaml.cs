@@ -52,7 +52,7 @@ namespace ProductExcel
             {10, 10},
         };
 
-        static RadomHelper radomHelper= new RadomHelper();
+        static RadomHelper radomHelper = new RadomHelper();
 
 
         public PayInfo CurrentPayInfo = null;
@@ -69,7 +69,7 @@ namespace ProductExcel
 
             dataGridPayInfo.UnloadingRow += new EventHandler<DataGridRowEventArgs>(dataGridPayInfo_UnloadingRow);
             dataGridCompanyInfo.UnloadingRow += new EventHandler<DataGridRowEventArgs>(dataGridCompany_UnloadingRow);
-            
+
             initINI();
             initGUI();
 
@@ -90,18 +90,18 @@ namespace ProductExcel
             comboCostBase.ItemsSource = new double[] { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };//成本
             comboPayMode.SelectedIndex = 0;
 
-            changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
+            changePayModeItemSource(Convert.ToInt32(comboPayDayCount.SelectedValue));
         }
 
         void initINI()
         {
 
             #region 公司文件存在
-            if (System.IO.File.Exists(iniCompanyFileName) == true) 
+            if (System.IO.File.Exists(iniCompanyFileName) == true)
             {
                 using (StreamReader SR = new StreamReader(iniCompanyFileName))
                 {
-                    string line = null;                    
+                    string line = null;
                     while ((line = SR.ReadLine()) != null)
                     {
                         string[] pms = line.Split(',');
@@ -148,11 +148,24 @@ namespace ProductExcel
                         payInfo.CostExtForSafe = Convert.ToDouble(pms[5]);
 
                         listPayInfo.Add(payInfo);
+
+                        if (listPayInfo.Count == MaxLine)
+                        {
+                            break;
+                        }
                     }
                 }
             }
             #endregion
-            
+
+            #region 补充空行
+            while (listPayInfo.Count < MaxLine)
+            {
+                PayInfo payInfo = new PayInfo();
+                listPayInfo.Add(payInfo);
+            }
+            #endregion
+
         }
 
         void initLogicParam()
@@ -169,7 +182,7 @@ namespace ProductExcel
                 comboPayMode.ItemsSource = null;
                 return;
             }
-            
+
 
             for (int i = 0; i < dicPayModeCount[day]; i++)
             {
@@ -186,25 +199,25 @@ namespace ProductExcel
 
         void dataGridPayInfo_UnloadingRow(object sender, DataGridRowEventArgs e)
         {
-            if (dataGridPayInfo.Items != null)
-            {
-                for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
-                {
-                    try
-                    {
-                        DataGridRow row = dataGridPayInfo.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
-                        if (row != null)
-                        {
-                            row.Header = (i + 1).ToString();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogToolsEx.Error2File(EORLog, "dataPayInfo_UnloadingRow ex={0}", ex);
-                    }
+            //if (dataGridPayInfo.Items != null)
+            //{
+            //    for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
+            //    {
+            //        try
+            //        {
+            //            DataGridRow row = dataGridPayInfo.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
+            //            if (row != null)
+            //            {
+            //                row.Header = (i + 1).ToString();
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            LogToolsEx.Error2File(EORLog, "dataPayInfo_UnloadingRow ex={0}", ex);
+            //        }
 
-                }
-            }
+            //    }
+            //}
 
         }
 
@@ -230,7 +243,7 @@ namespace ProductExcel
             }
 
         }
-        
+
 
 
         private void btnAddARow_Click(object sender, RoutedEventArgs e)
@@ -250,7 +263,7 @@ namespace ProductExcel
                 if ((dataGridPayInfo.SelectedItems[0] as PayInfo) != null)
                 {
                     CurrentPayInfo = dataGridPayInfo.SelectedItems[0] as PayInfo;
-                    comboCostBase.SelectedIndex = comboCostBase.Items.IndexOf( CurrentPayInfo.CostBase);
+                    comboCostBase.SelectedIndex = comboCostBase.Items.IndexOf(CurrentPayInfo.CostBase);
                     tbCostExtForSafe.Text = CurrentPayInfo.CostExtForSafe.ToString();
                 }
             }
@@ -274,7 +287,7 @@ namespace ProductExcel
 
         private bool CheckPayInfoOK()
         {
-            foreach(PayInfo payInfo in listPayInfo)
+            foreach (PayInfo payInfo in listPayInfo)
             {
                 if (string.IsNullOrEmpty(payInfo.Name.Trim()))
                 {
@@ -292,7 +305,7 @@ namespace ProductExcel
             {
                 string line = null;
 
-                for (int i = 0; i < dataGridPayInfo.Items.Count; i++ )
+                for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
                 {
                     if (dataGridPayInfo.Items[i] is PayInfo)
                     {
@@ -312,12 +325,12 @@ namespace ProductExcel
         }
 
         private void btSaveComany_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             using (StreamWriter SW = new StreamWriter(iniCompanyFileName))
             {
                 string line = null;
 
-                for (int i = 0; i < dataGridCompanyInfo.Items.Count; i++ )
+                for (int i = 0; i < dataGridCompanyInfo.Items.Count; i++)
                 {
                     if (dataGridCompanyInfo.Items[i] is CompanyInfo)
                     {
@@ -335,14 +348,14 @@ namespace ProductExcel
 
         private void comboPayDayCount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            changePayModeItemSource( Convert.ToInt32( comboPayDayCount.SelectedValue));
+            changePayModeItemSource(Convert.ToInt32(comboPayDayCount.SelectedValue));
         }
 
         private void comboCostBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (null != CurrentPayInfo)
             {
-               CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);                
+                CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
             }
         }
 
@@ -356,6 +369,7 @@ namespace ProductExcel
             SavePayInfo();
 
             SaveFileDialog sd = new SaveFileDialog();
+            sd.FileName = @"整月安排.xls";
             sd.Filter = "Excel文档|*.xls";
             sd.Title = "导出excel";
 
@@ -364,12 +378,12 @@ namespace ProductExcel
             {
                 string fullName = sd.FileName;
                 string strFailReason = "";
-                if (ExcelHelper.OutPutExcel(excelTempFieName, 
-                    fullName, 
-                    Convert.ToInt32(comboPayDayCount.SelectedValue), 
+                if (ExcelHelper.OutPutExcel(excelTempFieName,
+                    fullName,
+                    Convert.ToInt32(comboPayDayCount.SelectedValue),
                     Convert.ToInt32(comboPayMode.SelectedIndex),
-                    listPayInfo, 
-                    listCompanyInfo, 
+                    listPayInfo,
+                    listCompanyInfo,
                     radomHelper,
                     ref strFailReason))
                 {
@@ -386,9 +400,43 @@ namespace ProductExcel
 
         private void btTesting_Click(object sender, RoutedEventArgs e)
         {
-            
-        }      
+
+        }
+
+        private void btPaste_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            IDataObject ido = Clipboard.GetDataObject();
+
+            if (ido != null)
+            {
+                string[] formats = ido.GetFormats();
+                string format = formats[0].ToString();
+                object data = ido.GetData(format);
+                sb.Append(data);
+            }
+
+            //todo(liyh) paste the row
+            return;
+        }
+
+        private void btClean_Click(object sender, RoutedEventArgs e)
+        {
+            if (null != CurrentPayInfo)
+            {
+                CurrentPayInfo.Name = "";
+                CurrentPayInfo.PayDay = 0;
+                CurrentPayInfo.BillDay = 0;
+                CurrentPayInfo.PayLimit = 0.0;
+                CurrentPayInfo.CostBase = 0.0;
+            }
+            else
+            {
+                return;
+            }
+        }
+
     }
+
+
 }
-
-
