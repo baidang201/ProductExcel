@@ -287,15 +287,41 @@ namespace ProductExcel
 
         private bool CheckPayInfoOK()
         {
-            foreach (PayInfo payInfo in listPayInfo)
-            {
-                if (string.IsNullOrEmpty(payInfo.Name.Trim()))
-                {
-                    MessageBox.Show("有信息为空，请检查");
-                    return false;
-                }
-            }
+            //foreach (PayInfo payInfo in listPayInfo)
+            //{
+            //    if (string.IsNullOrEmpty(payInfo.Name.Trim()))
+            //    {
+            //        MessageBox.Show("有信息为空，请检查");
+            //        return false;
+            //    }
+            //}
             return true;
+        }
+
+        private bool HasNullPayInfo(PayInfo payInfo)
+        {
+            if (string.IsNullOrEmpty(payInfo.Name.Trim()))
+            {
+                return true;
+            }
+            if (0 == payInfo.PayDay)
+            {
+                return true;
+            }
+            if (0 == payInfo.BillDay)
+            {
+                return true;
+            }
+            if (0.0 == payInfo.PayLimit)
+            {
+                return true;
+            }
+            if (0.0 == payInfo.CostBase)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void SavePayInfo()
@@ -368,34 +394,45 @@ namespace ProductExcel
 
             SavePayInfo();
 
-            SaveFileDialog sd = new SaveFileDialog();
-            sd.FileName = @"整月安排.xls";
-            sd.Filter = "Excel文档|*.xls";
-            sd.Title = "导出excel";
-
-            bool? bResult = sd.ShowDialog();
-            if (bResult.HasValue && bResult.Value == true)
+            List<PayInfo> listNotNullPayInfo = new List<PayInfo>();
+            foreach (object item in dataGridPayInfo.Items)
             {
-                string fullName = sd.FileName;
-                string strFailReason = "";
-                if (ExcelHelper.OutPutExcel(excelTempFieName,
-                    fullName,
-                    Convert.ToInt32(comboPayDayCount.SelectedValue),
-                    Convert.ToInt32(comboPayMode.SelectedIndex),
-                    listPayInfo,
-                    listCompanyInfo,
-                    radomHelper,
-                    ref strFailReason))
+                if ((item as PayInfo) != null)
                 {
-                    MessageBox.Show("导出完成");
+                    PayInfo payInfo = item as PayInfo;
+                    if (false == HasNullPayInfo(payInfo))
+                    {
+                        listNotNullPayInfo.Add(payInfo);
+                    }
                 }
-                else
-                {
-                    MessageBox.Show(string.Format("导出失败。原因为：{0}", strFailReason));
-                }
-
-
             }
+            if (listNotNullPayInfo.Count == 0)
+            {
+                MessageBox.Show("没有可导出的记录");
+                return;
+            }
+
+            string singleName = @"整月安排.xls";
+            string fullName = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), 
+                singleName);
+            string strFailReason = "";
+            if (ExcelHelper.OutPutExcel(excelTempFieName,
+                fullName,
+                Convert.ToInt32(comboPayDayCount.SelectedValue),
+                Convert.ToInt32(comboPayMode.SelectedIndex),
+                listNotNullPayInfo,
+                listCompanyInfo,
+                radomHelper,
+                ref strFailReason))
+            {
+                MessageBox.Show("导出完成");
+            }
+            else
+            {
+                MessageBox.Show(string.Format("导出失败。原因为：{0}", strFailReason));
+            }
+
         }
 
         private void btTesting_Click(object sender, RoutedEventArgs e)
@@ -403,32 +440,23 @@ namespace ProductExcel
 
         }
 
-        private void btPaste_Click(object sender, RoutedEventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();
-            IDataObject ido = Clipboard.GetDataObject();
-
-            if (ido != null)
-            {
-                string[] formats = ido.GetFormats();
-                string format = formats[0].ToString();
-                object data = ido.GetData(format);
-                sb.Append(data);
-            }
-
-            //todo(liyh) paste the row
-            return;
-        }
-
         private void btClean_Click(object sender, RoutedEventArgs e)
         {
-            if (null != CurrentPayInfo)
+
+            if (dataGridPayInfo.SelectedItems.Count > 0)
             {
-                CurrentPayInfo.Name = "";
-                CurrentPayInfo.PayDay = 0;
-                CurrentPayInfo.BillDay = 0;
-                CurrentPayInfo.PayLimit = 0.0;
-                CurrentPayInfo.CostBase = 0.0;
+                foreach (object item in dataGridPayInfo.SelectedItems)
+                {
+                    if ((item as PayInfo) != null)
+                    {
+                        PayInfo payInfo = item as PayInfo;
+                        payInfo.Name = "";
+                        payInfo.PayDay = 0;
+                        payInfo.BillDay = 0;
+                        payInfo.PayLimit = 0.0;
+                        payInfo.CostBase = 0.0;
+                    }
+                }
             }
             else
             {
@@ -436,7 +464,79 @@ namespace ProductExcel
             }
         }
 
+        private void btPaste_Click(object sender, RoutedEventArgs e)
+        {
+           
+
+            //todo(liyh) paste the row 实现
+            return;
+        }
+
+
+
+        private void dataGridPayInfo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (
+                e.Key == Key.V
+                && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control
+                )
+            {
+
+                IDataObject ido = Clipboard.GetDataObject();
+
+                if (ido == null)
+                {
+                    return;
+
+                }
+                    string[] formats = ido.GetFormats();
+                    string format = formats[0].ToString();
+                    object data = ido.GetData(format);
+
+                    string strPaste = data.ToString();
+                    string[] rows = strPaste.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (rows.Length <= 0)
+                    {
+                        return;
+                    }
+
+                    string[] rgParam = rows[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries); ;
+                    int paramCount = 5;
+                    if (rgParam.Length != paramCount)
+                    {
+                        return;
+                    }
+
+                    int billDay = 0;
+                    int payDay = 0;
+                    double payLimit = 0.0;
+                    double costBase = 0.0;
+
+                    if (
+                        int.TryParse(rgParam[1], out billDay)
+                        && int.TryParse(rgParam[2], out payDay)
+                        && double.TryParse(rgParam[3], out payLimit)
+                        && double.TryParse(rgParam[4], out costBase)
+                        )
+                    {
+
+                        if (null != CurrentPayInfo)
+                        {
+                            CurrentPayInfo.Name = rgParam[0];
+                            CurrentPayInfo.BillDay = billDay;
+                            CurrentPayInfo.PayDay = payDay;
+                            CurrentPayInfo.PayLimit = payLimit;
+                            CurrentPayInfo.CostBase = costBase;
+                        }
+                    }                
+
+            }
+
+        }
+
     }
 
-
 }
+
+

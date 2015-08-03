@@ -15,6 +15,13 @@ namespace Signalway.CommThemes.Converters
             {
                 return "";
             }
+
+            int outValue = 0;
+            if (!int.TryParse(value.ToString(), out outValue))
+            {
+                return "";
+            }
+
             if (0 == int.Parse(value.ToString()))
             {
                 return "";
@@ -30,7 +37,7 @@ namespace Signalway.CommThemes.Converters
         {
             if (null == value)
             {
-                return null;
+                return 0;
             }
 
             if ("" == value)
@@ -39,7 +46,15 @@ namespace Signalway.CommThemes.Converters
             }
             else
             {
-                return int.Parse(value.ToString());
+                int outValue =0;
+                if (int.TryParse(value.ToString(), out outValue))
+                {
+                    return outValue;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
     }
@@ -52,6 +67,14 @@ namespace Signalway.CommThemes.Converters
             {
                 return "";
             }
+
+            double outValue = 0;
+            if (!double.TryParse(value.ToString(), out outValue))
+            {
+                return "";
+            }
+
+
             if (0.0 == System.Convert.ToDouble(value.ToString()))
             {
                 return "";
@@ -67,7 +90,7 @@ namespace Signalway.CommThemes.Converters
         {
             if (null == value)
             {
-                return null;
+                return 0.0;
             }
 
             if ("" == value)
@@ -76,7 +99,15 @@ namespace Signalway.CommThemes.Converters
             }
             else
             {
-                return int.Parse(value.ToString());
+                double outValue = 0.0;
+                if (double.TryParse(value.ToString(), out outValue))
+                {
+                    return outValue;
+                }
+                else
+                {
+                    return 0.0;
+                }
             }
         }
     }

@@ -27,11 +27,11 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制"></Button>
-                <Button x:Name="btPaste" Grid.Row="0" Grid.Column="2" Margin="6,3" Content="粘贴" Click="btPaste_Click"></Button>
+                <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制" Visibility="Hidden"></Button>
+                <Button x:Name="btPaste" Grid.Row="0" Grid.Column="2" Margin="6,3" Content="粘贴" Click="btPaste_Click" Visibility="Hidden"></Button>
                 <Button x:Name="btClean" Grid.Row="0" Grid.Column="3" Margin="6,3" Content="清除" Click="btClean_Click"></Button>
             </Grid>
-            <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionUnit="FullRow" SelectionMode="Single"  RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged">
+            <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged" PreviewKeyDown="dataGridPayInfo_PreviewKeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="2*" Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
                     <DataGridTextColumn Width="*" Binding="{Binding Path=BillDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntNoShowZeroConvert} }" Header="账单日" />
