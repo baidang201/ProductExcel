@@ -1,49 +1,50 @@
-﻿<Window x:Class="ProductExcel.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxsps="http://schemas.devexpress.com/winfx/2008/xaml/spreadsheet" x:Class="ProductExcel.MainWindow"
         Icon="ProductNavi.ico"
         Loaded="Window_Loaded"
         Unloaded="Window_Unloaded"
         Title="信用卡管理工具" Height="384" Width="1024">
     <Grid>
-        <Grid.RowDefinitions>           
-            <RowDefinition Height="Auto"></RowDefinition>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制" Visibility="Hidden"></Button>
-                <Button x:Name="btPaste" Grid.Row="0" Grid.Column="2" Margin="6,3" Content="粘贴" Click="btPaste_Click" Visibility="Hidden"></Button>
-                <Button x:Name="btClean" Grid.Row="0" Grid.Column="3" Margin="6,3" Content="清除" Click="btClean_Click"></Button>
+                <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制" Visibility="Hidden"/>
+                <Button x:Name="btPaste" Grid.Row="0" Grid.Column="2" Margin="6,3" Content="粘贴" Click="btPaste_Click" Visibility="Hidden"/>
+                <Button x:Name="btClean" Grid.Row="0" Grid.Column="3" Margin="6,3" Content="清除" Click="btClean_Click"/>
             </Grid>
             <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged" PreviewKeyDown="dataGridPayInfo_PreviewKeyDown">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="2*" Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=BillDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntNoShowZeroConvert} }" Header="账单日" />
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=PayDay,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IntNoShowZeroConvert} }" Header="还款日" />
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=PayLimit,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleNoShowZeroConvert}}" Header="额度" />
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=CostBase,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DoubleNoShowZeroConvert}}" IsReadOnly="True" Header="成本" />
-                    <DataGridTextColumn Width="*" Binding="{Binding Path=CostExtForSafe,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
+                    <DataGridTextColumn Width="2*" Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
+                    <DataGridTextColumn Width="*" Binding="{Binding BillDay, Converter={StaticResource IntNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="账单日" />
+                    <DataGridTextColumn Width="*" Binding="{Binding PayDay, Converter={StaticResource IntNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="还款日" />
+                    <DataGridTextColumn Width="*" Binding="{Binding PayLimit, Converter={StaticResource DoubleNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="额度" />
+                    <DataGridTextColumn Width="*" Binding="{Binding CostBase, Converter={StaticResource DoubleNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="成本" />
+                    <DataGridTextColumn Width="*" Binding="{Binding CostExtForSafe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Copy" Command="{x:Static ApplicationCommands.Copy}"></MenuItem>
-                        <MenuItem Header="Paste" Command="{x:Static ApplicationCommands.Paste}"></MenuItem>
+                        <MenuItem Header="Copy" Command="{x:Static ApplicationCommands.Copy}"/>
+                        <MenuItem Header="Paste" Command="{x:Static ApplicationCommands.Paste}"/>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <!--<DataGrid.CellStyle>
@@ -56,7 +57,7 @@
                 </Style>
             </DataGrid.CellStyle>-->
             </DataGrid>
-        </Grid>            
+        </Grid>
 
         <TabControl Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
             <TabItem x:Name="PaySetting" Header="参数设置" Height="23" VerticalAlignment="Top">
@@ -79,27 +80,35 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock  x:Name="PayDayCount" Grid.Row="0" Grid.Column="0" Margin="6,3" Text="还款天数:" HorizontalAlignment="Right" ></TextBlock>
-                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3,6,0"  Grid.Column="1" Height="24" VerticalAlignment="Top" SelectionChanged="comboPayDayCount_SelectionChanged"></ComboBox>
+                    <TextBlock  x:Name="PayDayCount" Grid.Row="0" Grid.Column="0" Margin="6,3" Text="还款天数:" HorizontalAlignment="Right" />
+                    <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3,6,0"  Grid.Column="1" Height="24" VerticalAlignment="Top" SelectionChanged="comboPayDayCount_SelectionChanged"/>
 
-                    <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}"></TextBlock>
-                    <ComboBox x:Name="comboCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" SelectionChanged="comboCostBase_SelectionChanged"></ComboBox>
-                    <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,3"></CheckBox>
-
-
-                    <TextBlock  x:Name="PayMode" Grid.Row="1" Grid.Column="0" Margin="6,3"  Text="还款模式:" HorizontalAlignment="Right" ></TextBlock>
-                    <ComboBox x:Name="comboPayMode" Grid.Row="1" Grid.Column="1" Margin="6,3" ></ComboBox>
+                    <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}"/>
+                    <ComboBox x:Name="comboCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" SelectionChanged="comboCostBase_SelectionChanged"/>
+                    <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,3"/>
 
 
-                    <TextBlock  x:Name="CostExtForSafe" Grid.Row="1" Grid.Column="3"  Margin="6,3" Text="多还款:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" Visibility="Hidden"></TextBlock>
-                    <TextBox x:Name="tbCostExtForSafe" Grid.Row="1" Grid.Column="4" Margin="6,3" Text="2"  IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" TextChanged="tbCostExtForSafe_TextChanged" Visibility="Hidden"></TextBox>
-                    <TextBlock  Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Text="%" Visibility="Hidden"></TextBlock>
-                    <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3" Visibility="Hidden"></CheckBox>
+                    <TextBlock  x:Name="PayMode" Grid.Row="1" Grid.Column="0" Margin="6,3"  Text="还款模式:" HorizontalAlignment="Right" />
+                    <ComboBox x:Name="comboPayMode" Grid.Row="1" Grid.Column="1" Margin="6,3" />
 
-                    <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" ></Button>
-                    <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" Visibility="Hidden" ></TextBlock>
-                
-                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click" Visibility="Hidden"></Button>
+
+                    <TextBlock  x:Name="CostExtForSafe" Grid.Row="1" Grid.Column="3"  Margin="6,3" Text="多还款:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" Visibility="Hidden"/>
+                    <TextBox x:Name="tbCostExtForSafe" Grid.Row="1" Grid.Column="4" Margin="6,3" Text="2"  IsEnabled="{Binding IsChecked, ElementName=cbTrunCostExtForSafe, Mode=OneWay}" TextChanged="tbCostExtForSafe_TextChanged" Visibility="Hidden"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" VerticalAlignment="Center" Text="%" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbTrunCostExtForSafe" Content="微调" Grid.Row="1" Grid.Column="6" Margin="6,3" Visibility="Hidden"/>
+
+                    <Button x:Name="btPreView" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,3" Content="预览" Click="btPreView_Click" />
+                    <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" />
+                    <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" Visibility="Hidden" />
+
+                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click" />
+
+
+
+                    <dxsps:SpreadsheetControl x:Name="spreadSheetPreView" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="200" Width="500"/>
+
+
+
                 </Grid>
 
             </TabItem>
@@ -118,15 +127,15 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="格式说明:" Margin="6,3" VerticalAlignment="Center" HorizontalAlignment="Right"></TextBlock>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="商户名-法人" Margin="6,3"  VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-                    <CheckBox x:Name="cbNeedModify" Grid.Row="0" Grid.Column="2">需要修改</CheckBox>
-                    <Button x:Name="btSaveComany" Grid.Row="0"  Grid.Column="3"  Content="保存" Margin="6,3" Click="btSaveComany_Click" ></Button>
-                    <DataGrid x:Name="dataGridCompanyInfo" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" IsEnabled="{Binding IsChecked,  ElementName=cbNeedModify, Mode=OneWay}" >
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="格式说明:" Margin="6,3" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="商户名-法人" Margin="6,3"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <CheckBox x:Name="cbNeedModify" Grid.Row="0" Grid.Column="2" Content="需要修改"/>
+                    <Button x:Name="btSaveComany" Grid.Row="0"  Grid.Column="3"  Content="保存" Margin="6,3" Click="btSaveComany_Click" />
+                    <DataGrid x:Name="dataGridCompanyInfo" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" IsEnabled="{Binding IsChecked, ElementName=cbNeedModify, Mode=OneWay}" >
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="*" Binding="{Binding Path=LiveliHood,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="民生"   />
-                            <DataGridTextColumn Width="*" Binding="{Binding Path=Normal,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="一般" />
-                            <DataGridTextColumn Width="*" Binding="{Binding Path=HightConsumption,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="高消费" />
+                            <DataGridTextColumn Width="*" Binding="{Binding LiveliHood, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="民生"   />
+                            <DataGridTextColumn Width="*" Binding="{Binding Normal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="一般" />
+                            <DataGridTextColumn Width="*" Binding="{Binding HightConsumption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="高消费" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

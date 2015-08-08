@@ -22,6 +22,7 @@ using Signalway.CommThemes;
 
 using System.IO;
 using UtilityTool;
+using DevExpress.Spreadsheet;
 
 namespace ProductExcel
 {
@@ -59,7 +60,7 @@ namespace ProductExcel
 
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -435,9 +436,62 @@ namespace ProductExcel
 
         }
 
+        private void btPreView_Click(object sender, RoutedEventArgs e)
+        {
+            if (false == CheckPayInfoOK())
+            {
+                return;
+            }
+
+            SavePayInfo();
+
+            List<PayInfo> listNotNullPayInfo = new List<PayInfo>();
+            foreach (object item in dataGridPayInfo.Items)
+            {
+                if ((item as PayInfo) != null)
+                {
+                    PayInfo payInfo = item as PayInfo;
+                    if (false == HasNullPayInfo(payInfo))
+                    {
+                        listNotNullPayInfo.Add(payInfo);
+                    }
+                }
+            }
+            if (listNotNullPayInfo.Count == 0)
+            {
+                MessageBox.Show("没有可导出的记录");
+                return;
+            }
+
+            string singleName = @"preView.xls";
+            string fullName = singleName;
+            string strFailReason = "";
+            if (ExcelHelper.OutPutExcel(excelTempFieName,
+                fullName,
+                Convert.ToInt32(comboPayDayCount.SelectedValue),
+                Convert.ToInt32(comboPayMode.SelectedIndex),
+                listNotNullPayInfo,
+                listCompanyInfo,
+                radomHelper,
+                ref strFailReason))
+            {
+
+            }
+            else
+            {
+                MessageBox.Show(string.Format("预览失败。原因为：{0}", strFailReason));
+            }
+        }
+
+
         private void btTesting_Click(object sender, RoutedEventArgs e)
         {
-
+            string filePath = @"preView.xlsx";
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                IWorkbook workbook = spreadSheetPreView.Document;
+                workbook.LoadDocument(filePath);
+            }
         }
 
         private void btClean_Click(object sender, RoutedEventArgs e)
@@ -534,7 +588,7 @@ namespace ProductExcel
             }
 
         }
-
+        
     }
 
 }
