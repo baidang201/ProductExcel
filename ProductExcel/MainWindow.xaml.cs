@@ -22,7 +22,6 @@ using Signalway.CommThemes;
 
 using System.IO;
 using UtilityTool;
-using DevExpress.Spreadsheet;
 
 namespace ProductExcel
 {
@@ -80,7 +79,7 @@ namespace ProductExcel
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-
+            SavePayInfo();
         }
 
         void initGUI()
@@ -258,7 +257,7 @@ namespace ProductExcel
         {
             if (dataGridPayInfo.SelectedItems.Count == 1)
             {
-                cbTrunCostBase.IsChecked = false;
+                cbTrunCostBase.IsChecked = true;
                 cbTrunCostExtForSafe.IsChecked = false;
 
                 if ((dataGridPayInfo.SelectedItems[0] as PayInfo) != null)
@@ -382,7 +381,24 @@ namespace ProductExcel
         {
             if (null != CurrentPayInfo)
             {
-                CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
+                if (true == cbTrunCostBase.IsChecked)
+                {
+                    CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
+                }
+                else
+                {
+                    for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
+                    {
+                        if (dataGridPayInfo.Items[i] is PayInfo)
+                        {
+                            PayInfo payInfo = (PayInfo)dataGridPayInfo.Items[i];
+                            if (0.0 != payInfo.CostBase)
+                            {
+                                payInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -413,10 +429,28 @@ namespace ProductExcel
                 return;
             }
 
-            string singleName = @"整月安排.xls";
+            string singleName = @"z整月安排.xls";
             string fullName = System.IO.Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), 
                 singleName);
+
+            int index = 1;
+            while(true)
+            {
+                 if (System.IO.File.Exists(fullName) == true)
+                 {
+                     singleName = string.Format("z整月安排{0}.xls", index);
+                     fullName = System.IO.Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                        singleName);
+                     index++;
+                 }
+                 else
+                 {
+                     break;
+                 }
+            }
+
             string strFailReason = "";
             if (ExcelHelper.OutPutExcel(excelTempFieName,
                 fullName,
@@ -486,17 +520,11 @@ namespace ProductExcel
 
         private void btTesting_Click(object sender, RoutedEventArgs e)
         {
-            string filePath = @"preView.xlsx";
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                IWorkbook workbook = spreadSheetPreView.Document;
-                workbook.LoadDocument(filePath);
-            }
+
         }
 
         private void btClean_Click(object sender, RoutedEventArgs e)
-        {
-
+        {     
             if (dataGridPayInfo.SelectedItems.Count > 0)
             {
                 foreach (object item in dataGridPayInfo.SelectedItems)
@@ -511,6 +539,7 @@ namespace ProductExcel
                         payInfo.CostBase = 0.0;
                     }
                 }
+                SavePayInfo();
             }
             else
             {
@@ -518,16 +547,7 @@ namespace ProductExcel
             }
         }
 
-        private void btPaste_Click(object sender, RoutedEventArgs e)
-        {
-           
-
-            //todo(liyh) paste the row 实现
-            return;
-        }
-
-
-
+        
         private void dataGridPayInfo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (

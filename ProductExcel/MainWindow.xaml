@@ -29,7 +29,6 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制" Visibility="Hidden"/>
-                <Button x:Name="btPaste" Grid.Row="0" Grid.Column="2" Margin="6,3" Content="粘贴" Click="btPaste_Click" Visibility="Hidden"/>
                 <Button x:Name="btClean" Grid.Row="0" Grid.Column="3" Margin="6,3" Content="清除" Click="btClean_Click"/>
             </Grid>
             <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged" PreviewKeyDown="dataGridPayInfo_PreviewKeyDown">
@@ -83,9 +82,9 @@
                     <TextBlock  x:Name="PayDayCount" Grid.Row="0" Grid.Column="0" Margin="6,3" Text="还款天数:" HorizontalAlignment="Right" />
                     <ComboBox x:Name="comboPayDayCount" Grid.Row="0" Margin="6,3,6,0"  Grid.Column="1" Height="24" VerticalAlignment="Top" SelectionChanged="comboPayDayCount_SelectionChanged"/>
 
-                    <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}"/>
-                    <ComboBox x:Name="comboCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3" IsEnabled="{Binding IsChecked, ElementName=cbTrunCostBase, Mode=OneWay}" SelectionChanged="comboCostBase_SelectionChanged"/>
-                    <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,3"/>
+                    <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="comboCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3,6,0"  SelectionChanged="comboCostBase_SelectionChanged" Height="24" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,0,6,3" Height="24" VerticalAlignment="Bottom" IsChecked="True"/>
 
 
                     <TextBlock  x:Name="PayMode" Grid.Row="1" Grid.Column="0" Margin="6,3"  Text="还款模式:" HorizontalAlignment="Right" />
@@ -102,10 +101,6 @@
                     <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" Visibility="Hidden" />
 
                     <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click" />
-
-
-
-                    <dxsps:SpreadsheetControl x:Name="spreadSheetPreView" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="200" Width="500"/>
 
 
 
