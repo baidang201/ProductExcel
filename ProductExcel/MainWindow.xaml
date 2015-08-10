@@ -100,8 +100,17 @@
                     <Button x:Name="btOutPutExcel" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" Margin="6,3" Content="确定输出" Click="btOutPutExcel_Click" />
                     <TextBlock x:Name="tbWarn" Grid.Row="4" Grid.Column="0" Foreground="Red" Text="警告：" Margin="6,3" Visibility="Hidden" />
 
-                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click" />
+                    <Button x:Name="btTesting" Grid.Row="3" Grid.Column="6" Content="测试函数" Click="btTesting_Click" Visibility="Hidden" />
 
+                    <DataGrid x:Name="dataGridPreView" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="7"  AutoGenerateColumns="False"  IsReadOnly="True" HeadersVisibility="None" CanUserSortColumns="False" Width="500" Height="200">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="2*" Binding="{Binding One, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header=""   />
+                            <DataGridTextColumn Width="*" Binding="{Binding Two, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="" />
+                            <DataGridTextColumn Width="*" Binding="{Binding Three, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="" />
+                            <DataGridTextColumn Width="*" Binding="{Binding Four, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="" />
+                            <DataGridTextColumn Width="*" Binding="{Binding Five,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="" />
+                        </DataGrid.Columns>
+                    </DataGrid>
 
 
                 </Grid>

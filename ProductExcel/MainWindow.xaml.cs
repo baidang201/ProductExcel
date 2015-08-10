@@ -51,6 +51,7 @@ namespace ProductExcel
             {9, 10},
             {10, 10},
         };
+        static private List<PreViewInfo> listPreViewInfo = new List<PreViewInfo>();
 
         static RadomHelper radomHelper = new RadomHelper();
 
@@ -75,6 +76,7 @@ namespace ProductExcel
 
             dataGridPayInfo.ItemsSource = listPayInfo;
             dataGridCompanyInfo.ItemsSource = listCompanyInfo;
+            dataGridPreView.ItemsSource = listPreViewInfo;
         }
 
         private void Window_Unloaded(object sender, RoutedEventArgs e)
@@ -497,24 +499,26 @@ namespace ProductExcel
                 return;
             }
 
-            string singleName = @"preView.xls";
-            string fullName = singleName;
+           
+           
             string strFailReason = "";
-            if (ExcelHelper.OutPutExcel(excelTempFieName,
-                fullName,
+            List<double> listSum = PreViewHelper.GetSumList(
                 Convert.ToInt32(comboPayDayCount.SelectedValue),
                 Convert.ToInt32(comboPayMode.SelectedIndex),
                 listNotNullPayInfo,
                 listCompanyInfo,
                 radomHelper,
-                ref strFailReason))
-            {
+                ref strFailReason);
 
-            }
-            else
+
+            List<double> listCard = new List<double>();
+            foreach(PayInfo payInfo in listNotNullPayInfo)
             {
-                MessageBox.Show(string.Format("预览失败。原因为：{0}", strFailReason));
+                listCard.Add(payInfo.PayLimit);
             }
+            
+            listPreViewInfo = PreViewHelper.ProductPreViewList(listSum, listCard);
+            dataGridPreView.ItemsSource = listPreViewInfo;
         }
 
 

@@ -2,71 +2,76 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using NPOI.HSSF.UserModel;
-using NPOI.HPSF;
-using NPOI.POIFS.FileSystem;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
-using System.IO;
 using UtilityTool;
 
 namespace ProductExcel
-{
-    class ExcelHelper
+{    
+    
+
+    class PreViewHelper
     {
         static string EORLog = @"EORLog.txt";
 
-        /*
-         * 模板名称
-         * 目标文件夹全名
-         * 付款天数
-         * 消费模式下标（用于随机数确定模式分配）
-         * 信用卡信息
-         * 公司信息
-         * 失败原因
-         */
+        public static List<PreViewInfo> ProductPreViewList(List<double> listSum, List<double> listCard)
+        {
+            List<PreViewInfo> listPreView = new List<PreViewInfo>();
+            double sumOfCard = listCard.Sum();
+            double sum = listSum.Sum();
+            
 
-        public static bool OutPutExcel(string tempFile, 
-            string fullName, 
-            int PayDaysCount, 
+            listPreView.Add(new PreViewInfo("总额度", "实际还款", "", "", ""));
+            listPreView.Add(new PreViewInfo(sumOfCard.ToString(), sum.ToString(), "", "", ""));
+            listPreView.Add(new PreViewInfo());
+
+            
+            listPreView.Add(new PreViewInfo("第一天", "第二天", "第三天", "第四天", "第五天"));
+            listPreView.Add(new PreViewInfo(
+                0>= listSum.Count()? "0": listSum[0].ToString(), 
+                1>= listSum.Count()? "0": listSum[1].ToString(), 
+                2>= listSum.Count()? "0": listSum[2].ToString(), 
+                3>= listSum.Count()? "0": listSum[3].ToString(), 
+                4>= listSum.Count()? "0": listSum[4].ToString()
+                ));
+
+            listPreView.Add(new PreViewInfo("第六天", "第七天", "第八天", "第九天", "第十天"));
+            listPreView.Add(new PreViewInfo(
+                5 >= listSum.Count() ? "0" : listSum[5].ToString(), 
+                6 >= listSum.Count() ? "0" : listSum[6].ToString(), 
+                7 >= listSum.Count() ? "0" : listSum[7].ToString(), 
+                8 >= listSum.Count() ? "0" : listSum[8].ToString(), 
+                9 >= listSum.Count() ? "0" : listSum[9].ToString()
+                ));
+            
+
+            return listPreView;
+        }
+
+        public static List<double> GetSumList(
+            int PayDaysCount,
             int PayModeIndex,
-            List<PayInfo> listPayInfo, 
+            List<PayInfo> listPayInfo,
             List<CompanyInfo> listCompanyInfo,
             RadomHelper randomHelper,
-            ref string  strFailReason
+            ref string strFailReason
             )
         {
+            List<double> listSum = new List<double>();
+
             int[] rgRadomNumIndex = new int[PayDaysCount];
             RadomHelper.invKT(PayDaysCount, randomHelper.dictRadom[PayDaysCount][PayModeIndex], rgRadomNumIndex);
 
             string strLog = string.Join(" ", rgRadomNumIndex);
             LogToolsEx.Error2File(EORLog, "OutPutExcel the RadomNumIndex is={0}", strLog);
-            
+
             //因为生成的下标是从1开始，需要转换为从0开始
             for (int i = 0; i < PayDaysCount; i++)
             {
-                rgRadomNumIndex[i]-= 1;
-            }
-
-            FileHelper.CopyFileTo(tempFile, fullName);            
-
-            if (System.IO.File.Exists(fullName) == false)//该批任务中，文件已解压，则不需要解密
-            {
-                strFailReason = "无法新建excel到目标目录";
-                return false;
-            }
-
-            IWorkbook workbook = null;
-            using (FileStream file = File.OpenRead(fullName))
-            {
-                workbook = new HSSFWorkbook(file);
+                rgRadomNumIndex[i] -= 1;
             }
 
             AssignInfo assignInfo = new AssignInfo();
             for (int i = 1; i <= PayDaysCount; i++)//遍历页数
-            {
-                ISheet sheet = workbook.GetSheet(i.ToString());
+            {                
 
                 int beginRow = 4;
                 int beginCol = 0;
@@ -80,14 +85,6 @@ namespace ProductExcel
                 int dayIndex = rgRadomNumIndex[i - 1];
                 int payBatchCount = 0;
 
-                int sumOfRowBeginRow = 4;
-                int sumOfRowBeginCol = 4;
-
-                int sumOfColBeginRow = 2;
-                int sumOfColBeginCol = 5;
-
-                int AllSumRow = 2;
-                int AllSumCol = 4;
 
                 Dictionary<int, double> dicSumRow = new Dictionary<int, double>();
                 Dictionary<int, double> dicSumCol = new Dictionary<int, double>();
@@ -99,11 +96,6 @@ namespace ProductExcel
                     {
                         dicSumRow[row] = 0;
                     }
-                   
-                    sheet.GetRow(row).GetCell(col).SetCellValue(payInfo.Name);
-                    sheet.GetRow(row).GetCell(col + 1).SetCellValue(payInfo.BillDay);
-                    sheet.GetRow(row).GetCell(col + 2).SetCellValue(payInfo.PayDay);
-                    sheet.GetRow(row).GetCell(col + 3).SetCellValue(payInfo.PayLimit);
 
                     //各消费等级总金额
                     double LiveliHoodMount = payInfo.PayLimit * assignInfo.dicAmountAssign[payInfo.CostBase][0];
@@ -115,8 +107,7 @@ namespace ProductExcel
                     for (int j = 0; j < payBatchCount; j++)
                     {
                         double pay = LiveliHoodMount * assignInfo.dicDaysUnionAssignInfo[PayDaysCount].listLiveliHoodPayInfoUnion[dayIndex].listOneDayPlanPayInfo[j] / 100d;
-                        sheet.GetRow(row).GetCell(liveliHoodBeginCol + j).SetCellValue(pay);
-
+                        
                         if (dicSumCol.Any(r => r.Key == liveliHoodBeginCol + j) == false)
                         {
                             dicSumCol[liveliHoodBeginCol + j] = 0;
@@ -132,7 +123,6 @@ namespace ProductExcel
                     for (int j = 0; j < payBatchCount; j++)
                     {
                         double pay = NormalMount * assignInfo.dicDaysUnionAssignInfo[PayDaysCount].listNormalPayInfoUnion[dayIndex].listOneDayPlanPayInfo[j] / 100d;
-                        sheet.GetRow(row).GetCell(NormalBeginCol + j).SetCellValue(pay);
 
                         if (dicSumCol.Any(r => r.Key == NormalBeginCol + j) == false)
                         {
@@ -149,7 +139,6 @@ namespace ProductExcel
                     for (int j = 0; j < payBatchCount; j++)
                     {
                         double pay = HightConsumptionMount * assignInfo.dicDaysUnionAssignInfo[PayDaysCount].listHightConsumptionPayInfoUnion[dayIndex].listOneDayPlanPayInfo[j] / 100d;
-                        sheet.GetRow(row).GetCell(HightConsumptionBeginCol + j).SetCellValue(pay);
 
                         if (dicSumCol.Any(r => r.Key == HightConsumptionBeginCol + j) == false)
                         {
@@ -169,7 +158,6 @@ namespace ProductExcel
                 foreach (int key in dicSumRow.Keys)
                 {
                     double sum = dicSumRow[key];
-                    sheet.GetRow(key).GetCell(sumOfRowBeginCol).SetCellValue(sum);
                 }
                 #endregion
 
@@ -177,40 +165,18 @@ namespace ProductExcel
                 foreach (int key in dicSumCol.Keys)
                 {
                     double sum = dicSumCol[key];
-                    sheet.GetRow(sumOfColBeginRow).GetCell(key).SetCellValue(sum);
                 }
                 #endregion
 
                 #region 计算总和
                 {
+                    double sum = dicSumRow.Values.Sum();
+                    listSum.Add(sum);
                 }
-                #endregion
-
-                sheet.ForceFormulaRecalculation = true;//重新计算结果
+                #endregion                
             }
 
-            #region 保存商户
-            {
-                int row = 1;
-                int col = 0;
-                ISheet sheet = workbook.GetSheet("库");
-                foreach (CompanyInfo companyInfo in listCompanyInfo)
-                {
-                    sheet.CreateRow(row);
-                    sheet.GetRow(row).CreateCell(col).SetCellValue(companyInfo.LiveliHood);
-                    sheet.GetRow(row).CreateCell(col + 1).SetCellValue(companyInfo.Normal);
-                    sheet.GetRow(row).CreateCell(col + 2).SetCellValue(companyInfo.HightConsumption);
-                    row++;
-                }
-
-            }
-            #endregion
-            using (FileStream fs = File.OpenWrite(fullName))
-            {
-                workbook.Write(fs);
-            }
-            return true;
-
+            return listSum;
         }
     }
 }

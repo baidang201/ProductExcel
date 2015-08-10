@@ -175,6 +175,102 @@ namespace ProductExcel
         }
     }
 
+    public class PreViewInfo : INotifyPropertyChanged
+    {
+        protected string m_One = "";
+        public string One
+        {
+            get { return this.m_One; }
+            set
+            {
+                this.m_One = value;
+                NotifyPropertyChanged("One");
+            }
+        }
+
+
+        protected string m_Two = "";
+        public string Two
+        {
+            get { return this.m_Two; }
+            set
+            {
+                this.m_Two = value;
+                NotifyPropertyChanged("Two");
+            }
+        }
+
+
+        protected string m_Three = "";
+        public string Three
+        {
+            get { return this.m_Three; }
+            set
+            {
+                this.m_Three = value;
+                NotifyPropertyChanged("Three");
+            }
+        }
+
+
+        protected string m_Four = "";
+        public string Four
+        {
+            get { return this.m_Four; }
+            set
+            {
+                this.m_Four = value;
+                NotifyPropertyChanged("Four");
+            }
+        }
+
+
+        protected string m_Five = "";
+        public string Five
+        {
+            get { return this.m_Five; }
+            set
+            {
+                this.m_Five = value;
+                NotifyPropertyChanged("Five");
+            }
+        }
+        
+
+        public PreViewInfo()
+        {
+            One = "";
+            Two = "";
+            Three = "";
+            Four = "";
+            Five = "";
+        }
+
+        public PreViewInfo(string one,
+            string two,
+            string three,
+            string four,
+            string five
+            )
+        {
+            One = one;
+            Two = two;
+            Three = three;
+            Four = four;
+            Five = five;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+    }
+
     //一天内的消费，第一笔 第二笔。一天内的分布
     public class OneDayPlanPayInfo
     {
