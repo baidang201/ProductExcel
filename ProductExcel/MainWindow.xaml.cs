@@ -495,7 +495,7 @@ namespace ProductExcel
             }
             if (listNotNullPayInfo.Count == 0)
             {
-                MessageBox.Show("没有可导出的记录");
+                MessageBox.Show("没有可预览的记录");
                 return;
             }
 
@@ -579,35 +579,77 @@ namespace ProductExcel
                         return;
                     }
 
-                    string[] rgParam = rows[0].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries); ;
-                    int paramCount = 5;
-                    if (rgParam.Length != paramCount)
+                    int startIndex = dataGridPayInfo.SelectedIndex;
+                    if (-1 == startIndex)//未选中
                     {
                         return;
                     }
 
-                    int billDay = 0;
-                    int payDay = 0;
-                    double payLimit = 0.0;
-                    double costBase = 0.0;
-
-                    if (
-                        int.TryParse(rgParam[1], out billDay)
-                        && int.TryParse(rgParam[2], out payDay)
-                        && double.TryParse(rgParam[3], out payLimit)
-                        && double.TryParse(rgParam[4], out costBase)
-                        )
+                    int index = 0;
+                    for (int i = 0; i < rows.Count(); i++)
                     {
-
-                        if (null != CurrentPayInfo)
+                        if (index + startIndex >= MaxLine)
                         {
-                            CurrentPayInfo.Name = rgParam[0];
-                            CurrentPayInfo.BillDay = billDay;
-                            CurrentPayInfo.PayDay = payDay;
-                            CurrentPayInfo.PayLimit = payLimit;
-                            CurrentPayInfo.CostBase = costBase;
+                            return;
                         }
-                    }                
+
+                        string[] rgParam = rows[i].Split(','); ;
+                        int paramCount = 5;
+                        if (rgParam.Length != paramCount)
+                        {
+                            return;
+                        }
+
+                        int billDay = 0;
+                        int payDay = 0;
+                        double payLimit = 0.0;
+                        double costBase = 0.0;
+
+
+                        bool fBillDay =int.TryParse(rgParam[1], out billDay);
+                        bool fPayDay =int.TryParse(rgParam[2], out payDay);
+                        bool fPayLimit =double.TryParse(rgParam[3], out payLimit);
+                        bool fCostBase = double.TryParse(rgParam[4], out costBase);
+                        if (
+                            fBillDay
+                            && fPayDay
+                            && fPayLimit
+                            && fCostBase
+                            )
+                        {//全部可解析
+                            if (dataGridPayInfo.Items[index + startIndex] is PayInfo)
+                            {
+                                int sub = index + startIndex;
+                                PayInfo payInfo = dataGridPayInfo.Items[sub] as PayInfo;
+                                if (null != payInfo)
+                                {
+                                    payInfo.Name = rgParam[0];
+                                    payInfo.BillDay = billDay;
+                                    payInfo.PayDay = payDay;
+                                    payInfo.PayLimit = payLimit;
+                                    payInfo.CostBase = costBase;
+                                    index++;
+                                }
+                            }
+                        }
+                        else//部分可解析
+                        {
+                            if (dataGridPayInfo.Items[index + startIndex] is PayInfo)
+                            {
+                                int sub = index + startIndex;
+                                PayInfo payInfo = dataGridPayInfo.Items[sub] as PayInfo;
+                                if (null != payInfo)
+                                {
+                                    payInfo.Name = rgParam[0];
+                                    payInfo.BillDay = billDay;
+                                    payInfo.PayDay = payDay;
+                                    payInfo.PayLimit = payLimit;
+                                    payInfo.CostBase = costBase;
+                                    index++;
+                                }
+                            }
+                        }
+                    }
 
             }
 

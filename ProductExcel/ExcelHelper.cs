@@ -193,7 +193,7 @@ namespace ProductExcel
             {
                 int row = 1;
                 int col = 0;
-                ISheet sheet = workbook.GetSheet("库");
+                ISheet sheet = workbook.GetSheet("商户库");
                 foreach (CompanyInfo companyInfo in listCompanyInfo)
                 {
                     sheet.CreateRow(row);
