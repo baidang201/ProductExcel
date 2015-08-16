@@ -659,7 +659,7 @@ namespace ProductExcel
     {
         static public List<CostBaseForEnum> collectionBaseForEnum = new List<CostBaseForEnum>()
         {
-            new CostBaseForEnum("未设置", 0.0),
+            new CostBaseForEnum("", 0.0),
             new CostBaseForEnum("0.5", 0.5),
             new CostBaseForEnum("0.6", 0.6),
             new CostBaseForEnum("0.7", 0.7),

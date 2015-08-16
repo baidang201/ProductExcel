@@ -684,7 +684,7 @@ namespace ProductExcel
                 this.m_CostBaseValue = value;
                 if (0.0 == m_CostBaseValue)
                 {
-                    CostBaseDisplay = "未设置";
+                    CostBaseDisplay = "";
                 }
                 else
                 {
@@ -696,7 +696,7 @@ namespace ProductExcel
 
         public CostBaseForEnum()
         {
-            CostBaseDisplay ="未设置";
+            CostBaseDisplay ="";
             CostBaseValue = 0.0;
         }
 
