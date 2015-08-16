@@ -31,7 +31,7 @@
                 <Button Grid.Row="0" Grid.Column="1" Margin="6,3" Content="复制" Visibility="Hidden"/>
                 <Button x:Name="btClean" Grid.Row="0" Grid.Column="3" Margin="6,3" Content="清除" Click="btClean_Click"/>
             </Grid>
-            <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged" PreviewKeyDown="dataGridPayInfo_PreviewKeyDown">
+            <DataGrid x:Name="dataGridPayInfo" Grid.Row="1"  Grid.Column="0" HorizontalAlignment="Left" CanUserAddRows="False" CanUserDeleteRows="False" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserSortColumns="False"  RowHeight="24" Height="300"  SelectionChanged="dataGridExcel_SelectionChanged" PreviewKeyDown="dataGridPayInfo_PreviewKeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="2*" Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="姓名"   />
                     <DataGridTextColumn Width="*" Binding="{Binding BillDay, Converter={StaticResource IntNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="账单日" />
@@ -135,7 +135,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="商户名-法人" Margin="6,3"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     <CheckBox x:Name="cbNeedModify" Grid.Row="0" Grid.Column="2" Content="需要修改"/>
                     <Button x:Name="btSaveComany" Grid.Row="0"  Grid.Column="3"  Content="保存" Margin="6,3" Click="btSaveComany_Click" />
-                    <DataGrid x:Name="dataGridCompanyInfo" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left"    VerticalAlignment="Top" AutoGenerateColumns="False" RowHeight="24" IsEnabled="{Binding IsChecked, ElementName=cbNeedModify, Mode=OneWay}" >
+                    <DataGrid x:Name="dataGridCompanyInfo" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Left"    VerticalAlignment="Top"  CanUserAddRows="False" CanUserDeleteRows="False"  AutoGenerateColumns="False" CanUserSortColumns="False" RowHeight="24" Height="300"   IsEnabled="{Binding IsChecked, ElementName=cbNeedModify, Mode=OneWay}" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Width="*" Binding="{Binding LiveliHood, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="民生"   />
                             <DataGridTextColumn Width="*" Binding="{Binding Normal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="一般" />

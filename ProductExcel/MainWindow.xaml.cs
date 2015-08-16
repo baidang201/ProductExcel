@@ -37,7 +37,8 @@ namespace ProductExcel
         int companyInfoMemberCount = 3;
         int payInfoMemberCount = 6;
 
-        static private int MaxLine = 100;
+        static private int MaxLinePayInfo = 100;
+        static private int MaxLineCompanyInfo = 40;
         static private List<PayInfo> listPayInfo = new List<PayInfo>();
         static private List<CompanyInfo> listCompanyInfo = new List<CompanyInfo>();
         static private Dictionary<int, int> dicPayModeCount = new Dictionary<int, int>() 
@@ -120,6 +121,10 @@ namespace ProductExcel
 
                         listCompanyInfo.Add(companyInfo);
 
+                        if (listCompanyInfo.Count == MaxLineCompanyInfo)
+                        {
+                            break;
+                        }
                     }
                 }
             }
@@ -151,7 +156,7 @@ namespace ProductExcel
 
                         listPayInfo.Add(payInfo);
 
-                        if (listPayInfo.Count == MaxLine)
+                        if (listPayInfo.Count == MaxLinePayInfo)
                         {
                             break;
                         }
@@ -161,10 +166,15 @@ namespace ProductExcel
             #endregion
 
             #region 补充空行
-            while (listPayInfo.Count < MaxLine)
+            while (listPayInfo.Count < MaxLinePayInfo)
             {
                 PayInfo payInfo = new PayInfo();
                 listPayInfo.Add(payInfo);
+            }
+            while (listCompanyInfo.Count < MaxLineCompanyInfo)
+            {
+                CompanyInfo companyInfo = new CompanyInfo();
+                listCompanyInfo.Add(companyInfo);
             }
             #endregion
 
@@ -588,7 +598,7 @@ namespace ProductExcel
                     int index = 0;
                     for (int i = 0; i < rows.Count(); i++)
                     {
-                        if (index + startIndex >= MaxLine)
+                        if (index + startIndex >= MaxLinePayInfo)
                         {
                             return;
                         }
