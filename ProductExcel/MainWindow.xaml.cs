@@ -57,11 +57,11 @@ namespace ProductExcel
         static RadomHelper radomHelper = new RadomHelper();
 
 
-        public PayInfo CurrentPayInfo = null;
-
+        public PayInfo CurrentPayInfo = null;       
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            CostBaseInDataGridPayInfo.ItemsSource = BaseForEnumInfo.collectionBaseForEnum;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -269,13 +269,11 @@ namespace ProductExcel
         {
             if (dataGridPayInfo.SelectedItems.Count == 1)
             {
-                cbTrunCostBase.IsChecked = true;
                 cbTrunCostExtForSafe.IsChecked = false;
 
                 if ((dataGridPayInfo.SelectedItems[0] as PayInfo) != null)
                 {
                     CurrentPayInfo = dataGridPayInfo.SelectedItems[0] as PayInfo;
-                    comboCostBase.SelectedIndex = comboCostBase.Items.IndexOf(CurrentPayInfo.CostBase);
                     tbCostExtForSafe.Text = CurrentPayInfo.CostExtForSafe.ToString();
                 }
             }
@@ -391,27 +389,17 @@ namespace ProductExcel
 
         private void comboCostBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (null != CurrentPayInfo)
+            for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
             {
-                if (true == cbTrunCostBase.IsChecked)
+                if (dataGridPayInfo.Items[i] is PayInfo)
                 {
-                    CurrentPayInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
-                }
-                else
-                {
-                    for (int i = 0; i < dataGridPayInfo.Items.Count; i++)
+                    PayInfo payInfo = (PayInfo)dataGridPayInfo.Items[i];
+                    if (0.0 != payInfo.CostBase)
                     {
-                        if (dataGridPayInfo.Items[i] is PayInfo)
-                        {
-                            PayInfo payInfo = (PayInfo)dataGridPayInfo.Items[i];
-                            if (0.0 != payInfo.CostBase)
-                            {
-                                payInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
-                            }
-                        }
+                        payInfo.CostBase = Convert.ToDouble(comboCostBase.SelectedValue);
                     }
                 }
-            }
+            }                
         }
 
         private void btOutPutExcel_Click(object sender, RoutedEventArgs e)
@@ -667,6 +655,24 @@ namespace ProductExcel
         
     }
 
+    public class BaseForEnumInfo
+    {
+        static public List<CostBaseForEnum> collectionBaseForEnum = new List<CostBaseForEnum>()
+        {
+            new CostBaseForEnum("未设置", 0.0),
+            new CostBaseForEnum("0.5", 0.5),
+            new CostBaseForEnum("0.6", 0.6),
+            new CostBaseForEnum("0.7", 0.7),
+            new CostBaseForEnum("0.8", 0.8),
+            new CostBaseForEnum("0.9", 0.9),
+            new CostBaseForEnum("1", 1),
+        };
+
+        public List<CostBaseForEnum> GetItems()
+        {
+            return collectionBaseForEnum;
+        }
+    }
 }
 
 

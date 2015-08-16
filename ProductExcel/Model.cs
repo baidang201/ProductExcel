@@ -660,24 +660,66 @@ namespace ProductExcel
         }
     }
 
-
-    public class ExcelInfo
+    public class CostBaseForEnum : INotifyPropertyChanged
     {
-        public double realMount;
-        int PayDaysCount; 
-    }
-
-    public class PayAssignModeInfo
-    {
-        public int ModeDayCount = 0;
-        public List<int> listDaysAssign;
-
-        public PayAssignModeInfo()
+        //成本
+        protected string m_CostBaseDisplay = "";
+        public string CostBaseDisplay
         {
-            ModeDayCount = 0;
-            listDaysAssign = new List<int>();
+            get { return this.m_CostBaseDisplay; }
+            set
+            {
+                this.m_CostBaseDisplay = value;
+                NotifyPropertyChanged("CostBaseDisplay");
+            }
         }
 
-    }
+        //成本
+        protected double m_CostBaseValue = 0.0;
+        public double CostBaseValue
+        {
+            get { return this.m_CostBaseValue; }
+            set
+            {
+                this.m_CostBaseValue = value;
+                if (0.0 == m_CostBaseValue)
+                {
+                    CostBaseDisplay = "未设置";
+                }
+                else
+                {
+                    CostBaseDisplay = CostBaseValue.ToString();
+                }
+                NotifyPropertyChanged("CostBaseValue");
+            }
+        }
+
+        public CostBaseForEnum()
+        {
+            CostBaseDisplay ="未设置";
+            CostBaseValue = 0.0;
+        }
+
+        public CostBaseForEnum(string display, double value)
+        {
+            CostBaseDisplay = display;
+            CostBaseValue = value;
+        }
+
+        public CostBaseForEnum(double value)
+        {
+            CostBaseValue = value;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+    }   
 
 }

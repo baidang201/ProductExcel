@@ -37,7 +37,12 @@
                     <DataGridTextColumn Width="*" Binding="{Binding BillDay, Converter={StaticResource IntNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="账单日" />
                     <DataGridTextColumn Width="*" Binding="{Binding PayDay, Converter={StaticResource IntNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="还款日" />
                     <DataGridTextColumn Width="*" Binding="{Binding PayLimit, Converter={StaticResource DoubleNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="额度" />
-                    <DataGridTextColumn Width="*" Binding="{Binding CostBase, Converter={StaticResource DoubleNoShowZeroConvert}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Header="成本" />
+                    <DataGridComboBoxColumn Width="*" 
+                                            x:Name="CostBaseInDataGridPayInfo" 
+                                            SelectedValueBinding="{Binding Path=CostBase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"                                                                                       
+                                            SelectedValuePath="CostBaseValue"
+                                            DisplayMemberPath="CostBaseDisplay"
+                                            Header="成本" />
                     <DataGridTextColumn Width="*" Binding="{Binding CostExtForSafe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="多还款"  Visibility="Hidden"/>
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
@@ -84,7 +89,6 @@
 
                     <TextBlock  x:Name="CostBase" Grid.Row="0" Grid.Column="3" Margin="6,3"  Text="还款成本:"  HorizontalAlignment="Right"/>
                     <ComboBox x:Name="comboCostBase" Grid.Row="0" Grid.Column="4" Margin="6,3,6,0"  SelectionChanged="comboCostBase_SelectionChanged" Height="24" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="cbTrunCostBase" Content="微调" Grid.Row="0" Grid.Column="6" Margin="6,0,6,3" Height="24" VerticalAlignment="Bottom" IsChecked="True"/>
 
 
                     <TextBlock  x:Name="PayMode" Grid.Row="1" Grid.Column="0" Margin="6,3"  Text="还款模式:" HorizontalAlignment="Right" />
